@@ -7,6 +7,7 @@ require('dotenv').config();
 
 global.basedir = __dirname;
 
+const a = 10;
 // const authRouter = require("./routes/api/users");
 
 const app = express();
