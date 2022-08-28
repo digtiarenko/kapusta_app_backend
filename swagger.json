@@ -2,7 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "version": "1.0.0",
-    "title": "Kapusta API",
+    "title": "Kapusta V1 API docs",
     "description": "Documentaion for financial accounting application",
     "license": {
       "name": "MIT",
@@ -11,7 +11,7 @@
   },
   "consumes": ["application/json"],
   "produces": ["application/json"],
-  "servers": [{ "url": "http://localhost:5000" }, { "url": "heroku url" }],
+  "servers": [{ "url": "http://localhost:5000/api" }, { "url": "heroku url" }],
   "tags": [
     {
       "name": "Auth",
@@ -48,16 +48,30 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RegistrationResponse"
+                  "$ref": "#/components/schemas/RegistrationSuccessResponse"
                 }
               }
             }
           },
           "400": {
-            "description": "Bad request (invalid request body)"
+            "description": "Bad request (invalid request body)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationErrorResponse"
+                }
+              }
+            }
           },
           "409": {
-            "description": "Provided email already exists"
+            "description": "Provided email already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationConflictResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -66,6 +80,22 @@
       "post": {
         "tags": ["Auth"],
         "security": [{ "Bearer": [] }]
+      }
+    },
+    "/auth/google": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Google registration and authentication",
+        "responses": {
+          "200": {
+            "description": "Successful operation (redirect to front-end with accessToken)",
+            "content": {}
+          },
+          "403": {
+            "description": "Not registered",
+            "content": {}
+          }
+        }
       }
     }
   },
@@ -78,17 +108,21 @@
           "email": {
             "type": "string",
             "description": "User's email",
-            "format": "email"
+            "format": "email",
+            "minLength": 5,
+            "maxLength": 63
           },
           "password": {
             "type": "string",
             "description": "User's password",
+            "minLength": 6,
+            "maxLength": 100,
             "example": "qwerty123"
           }
         }
       },
 
-      "RegistrationResponse": {
+      "RegistrationSuccessResponse": {
         "type": "object",
         "properties": {
           "user": {
@@ -113,8 +147,29 @@
             "balance": 0
           }
         }
+      },
+
+      "RegistrationErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "error message"
+          }
+        }
+      },
+      "RegistrationConflictResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "error message",
+            "example": "Email in use"
+          }
+        }
       }
     },
+
     "securitySchemes": {
       "Bearer": {
         "type": "http",
