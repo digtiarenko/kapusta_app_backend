@@ -11,20 +11,26 @@
   },
   "consumes": ["application/json"],
   "produces": ["application/json"],
-  "servers": [{ "url": "http://localhost:5000" }],
+  "servers": [{ "url": "http://localhost:5000" }, { "url": "heroku url" }],
   "tags": [
     {
       "name": "Auth",
       "description": "Authorization endpoints"
+    },
+    {
+      "name": "User",
+      "description": "User endpoints"
     }
   ],
+
   "paths": {
     "/auth/register": {
       "post": {
         "tags": ["Auth"],
         "summary": "User registration",
+
         "parameters": [],
-        "security": [{ "Bearer": [] }],
+
         "requestBody": {
           "description": "Registration's object",
           "required": true,
@@ -39,17 +45,27 @@
         "responses": {
           "201": {
             "description": "Successful operation",
-            "content": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponse"
+                }
+              }
+            }
           },
           "400": {
-            "description": "Bad request (invalid request body)",
-            "content": {}
+            "description": "Bad request (invalid request body)"
           },
           "409": {
-            "description": "Provided email already exists",
-            "content": {}
+            "description": "Provided email already exists"
           }
         }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": ["Auth"],
+        "security": [{ "Bearer": [] }]
       }
     }
   },
@@ -68,6 +84,33 @@
             "type": "string",
             "description": "User's password",
             "example": "qwerty123"
+          }
+        }
+      },
+
+      "RegistrationResponse": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string",
+                "description": "User's email",
+                "format": "email"
+              },
+              "balance": {
+                "type": "number",
+                "description": "User's balance",
+                "example": "0"
+              }
+            }
+          }
+        },
+        "example": {
+          "user": {
+            "email": "user@example.com",
+            "balance": 0
           }
         }
       }
