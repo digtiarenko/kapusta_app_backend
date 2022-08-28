@@ -1,7 +1,7 @@
 const { User } = require('../userModel');
 
-const updateUserTokenById = (userId, token) => {
-  const result = User.findByIdAndUpdate(userId, token, { new: true });
+const updateUserTokenById = async (userId, token) => {
+  const result = await User.findByIdAndUpdate(userId, token, { new: true });
   return result;
 };
 

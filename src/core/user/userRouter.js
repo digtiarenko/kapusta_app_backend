@@ -1,13 +1,19 @@
 const express = require('express');
 const { ctrlWrapper } = require('../../helpers');
 const ctrlUser = require('./userController');
+const { validation, auth } = require('../../middleware');
+const { joiSchemas } = require('./userModel');
 
 const router = express.Router();
 
-router.post('/balance', ctrlWrapper(ctrlUser.addBalance));
+router.patch(
+  '/balance',
+  auth,
+  validation(joiSchemas.balance),
+  ctrlWrapper(ctrlUser.addBalance),
+);
 
-router.get('/balance', ctrlWrapper(ctrlUser.getBalance));
-
-router.get('/current', ctrlWrapper(ctrlUser.currentUser));
+router.get('/', auth, ctrlWrapper(ctrlUser.currentUser));
+router.delete('/', auth, ctrlWrapper(ctrlUser.deleteUser));
 
 module.exports = router;

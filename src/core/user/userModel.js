@@ -1,6 +1,9 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { Schema, model } = require('mongoose');
+const Joi = require('joi');
+
+const emailRegexp = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
 const userSchema = Schema(
   {
@@ -35,7 +38,7 @@ userSchema.methods.comparePassword = async function (password) {
 
 userSchema.methods.createToken = function () {
   const payload = {
-    _id: this._id,
+    id: this._id,
   };
 
   return jwt.sign(payload, process.env.JWT_ACCESS_SECRET, {
@@ -43,8 +46,23 @@ userSchema.methods.createToken = function () {
   });
 };
 
+const registerSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
+  password: Joi.string().min(6).required(),
+});
+
+const updateBalanceSchema = Joi.object({
+  balance: Joi.number().required(),
+});
+
+const joiSchemas = {
+  register: registerSchema,
+  balance: updateBalanceSchema,
+};
+
 const User = model('user', userSchema);
 
 module.exports = {
   User,
+  joiSchemas,
 };
