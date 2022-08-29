@@ -24,6 +24,7 @@ const userSchema = Schema(
       type: Number,
       default: 0,
     },
+    categories: [{ type: Schema.Types.ObjectId, ref: 'category' }],
   },
   { versionKey: false, timestamps: true },
 );

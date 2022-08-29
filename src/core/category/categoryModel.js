@@ -14,11 +14,10 @@ const categorySchema = new Schema(
         message:
           "{VALUE} is not supported, have to choose between 'expenses' or 'income' ",
       },
-      default: 'expenses',
     },
-    owner: {
-      type: Schema.Types.ObjectId,
-      ref: 'user',
+    default: {
+      type: Boolean,
+      default: false,
     },
   },
   { versionKey: false, timestamps: true },
