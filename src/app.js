@@ -13,6 +13,8 @@ const categoryRouter = require('./core/category/categoryRouter');
 const transactionRouter = require('./core/transaction/transactionRouter');
 const reportRouter = require('./core/report/reportRouter');
 
+const { errorHandler } = require('./middleware');
+
 const app = express();
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
@@ -26,7 +28,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use('/api/auth', authRouter);
 
-app.use('/api/users', userRouter);
+app.use('/api/user', userRouter);
 
 app.use('/api/categories', categoryRouter);
 
@@ -38,10 +40,6 @@ app.use((req, res) => {
   res.status(404).json({ message: 'Not found' });
 });
 
-app.use((err, req, res, next) => {
-  const { status = 500, message = 'Server error' } = err;
-  // console.log(err.stack);
-  res.status(status).json({ message });
-});
+app.use(errorHandler);
 
 module.exports = app;

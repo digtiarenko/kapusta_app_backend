@@ -1,5 +1,11 @@
 const currentUser = (req, res) => {
-  res.send('currentUser controller');
+  const { email, balance } = req.user;
+  res.status(200).json({
+    user: {
+      email,
+      balance,
+    },
+  });
 };
 
 module.exports = currentUser;
