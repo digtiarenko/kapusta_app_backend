@@ -10,7 +10,7 @@ const deleteUser = async (req, res) => {
   }
 
   res.status(200).json({
-    message: 'user deleted successfully',
+    message: 'User deleted successfully',
   });
 };
 module.exports = deleteUser;

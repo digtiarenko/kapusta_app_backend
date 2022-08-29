@@ -3,19 +3,24 @@ const serviceUsers = require('../core/user/userService');
 const { createError } = require('../helpers');
 
 const auth = async (req, _, next) => {
-  const { authorization = '' } = req.headers;
-  const [bearer, token] = authorization.split(' ');
-  if (bearer !== 'Bearer') {
-    next(createError(401), 'Not authorized');
-  }
+  const authorizationHeader = req.get('Authorization');
   try {
-    const { id } = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
-    const user = await serviceUsers.getUserById(id);
-    if (!user || !user.token) {
-      next(createError(401), 'Not authorized');
+    if (authorizationHeader) {
+      const [bearer, token] = authorizationHeader.split(' ');
+      if (bearer !== 'Bearer') {
+        next(createError(401, 'Not authorized'));
+      }
+
+      const { id } = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+      const user = await serviceUsers.getUserById(id);
+      if (!user || !user.token) {
+        next(createError(401, 'Not authorized'));
+      }
+      req.user = user;
+      next();
+    } else {
+      next(createError(400, 'Missing authentication token'));
     }
-    req.user = user;
-    next();
   } catch (error) {
     next(createError(401, error.message));
   }

@@ -48,7 +48,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RegistrationSuccessResponse"
+                  "$ref": "#/components/schemas/UserInfo"
                 }
               }
             }
@@ -76,12 +76,7 @@
         }
       }
     },
-    "/auth/login": {
-      "post": {
-        "tags": ["Auth"],
-        "security": [{ "Bearer": [] }]
-      }
-    },
+
     "/auth/google": {
       "get": {
         "tags": ["Auth"],
@@ -94,6 +89,151 @@
           "403": {
             "description": "Not registered",
             "content": {}
+          }
+        }
+      }
+    },
+
+    "/auth/login": {
+      "post": {
+        "tags": ["Auth"]
+      }
+    },
+
+    "/auth/logout": {
+      "get": {
+        "tags": ["Auth"],
+        "security": [{ "Bearer": [] }]
+      }
+    },
+    "/user": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Get user info",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserInfo"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No token provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoTokenResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidTokenResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["User"],
+        "summary": "Clear all user info",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDeleteResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No token provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoTokenResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidTokenResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/balance": {
+      "patch": {
+        "tags": ["User"],
+        "summary": "Update user balance",
+
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+
+        "requestBody": {
+          "description": "User's balance object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserBalanceRequest"
+              }
+            }
+          }
+        },
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserInfo"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No token provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoTokenResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidTokenResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -122,7 +262,7 @@
         }
       },
 
-      "RegistrationSuccessResponse": {
+      "UserInfo": {
         "type": "object",
         "properties": {
           "user": {
@@ -158,6 +298,7 @@
           }
         }
       },
+
       "RegistrationConflictResponse": {
         "type": "object",
         "properties": {
@@ -165,6 +306,49 @@
             "type": "string",
             "description": "error message",
             "example": "Email in use"
+          }
+        }
+      },
+
+      "NoTokenResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "error message",
+            "example": "Missing authentication token"
+          }
+        }
+      },
+
+      "InvalidTokenResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "error message",
+            "example": "Not authorized"
+          }
+        }
+      },
+
+      "UserDeleteResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "message",
+            "example": "User deleted successfully"
+          }
+        }
+      },
+      "UserBalanceRequest": {
+        "type": "object",
+        "properties": {
+          "balance": {
+            "type": "number",
+            "description": "User's balance",
+            "example": "123.45"
           }
         }
       }

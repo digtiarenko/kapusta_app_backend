@@ -10,7 +10,7 @@ router.patch(
   '/balance',
   auth,
   validation(joiSchemas.balance),
-  ctrlWrapper(ctrlUser.addBalance),
+  ctrlWrapper(ctrlUser.updateBalance),
 );
 
 router.get('/', auth, ctrlWrapper(ctrlUser.currentUser));
