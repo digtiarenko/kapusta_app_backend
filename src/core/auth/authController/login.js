@@ -8,17 +8,15 @@ const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await userService.getUserByEmail(email);
   if (!user) {
-    throw createError(409, `Email ${email} not found`);
+    throw createError(403, 'Not registered');
   }
   const passCompare = bcrypt.compareSync(password, user.password);
   if (!passCompare) {
-    throw createError(409, 'password is wrong');
+    throw createError(403, 'Not registered');
   }
-
   const payload = {
     id: user._id,
   };
-
   const token = jwt.sign(payload, JWT_ACCESS_SECRET, {
     expiresIn: JWT_ACCESS_EXPIRE_TIME,
   });

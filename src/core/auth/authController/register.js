@@ -6,7 +6,7 @@ const register = async (req, res) => {
   const { email, password } = req.body;
   const user = await userService.getUserByEmail(email);
   if (user) {
-    throw createError(409, `Email in use`);
+    throw createError(409, `Email is already used`);
   }
   const hashPassword = await bcrypt.hash(
     password,
