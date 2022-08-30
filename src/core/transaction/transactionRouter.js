@@ -1,6 +1,7 @@
 const express = require('express');
 const { ctrlWrapper } = require('../../helpers');
 const ctrlTransaction = require('./transactionController');
+const { auth } = require('../../middleware');
 
 const router = express.Router();
 
@@ -15,11 +16,13 @@ router.post(
 
 router.post(
   '/income/:categoryId',
+  auth,
   ctrlWrapper(ctrlTransaction.addIncomeTransaction),
 );
 
 router.delete(
   '/:transactionId',
+  auth,
   ctrlWrapper(ctrlTransaction.deleteTransaction),
 );
 
