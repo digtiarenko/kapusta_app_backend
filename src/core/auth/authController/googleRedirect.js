@@ -45,7 +45,7 @@ const googleRedirect = async (req, res) => {
     });
 
     const token = newUser.createToken();
-    await userService.updateUserTokenById(newUser._id, { token });
+    await userService.updateUserTokenById(newUser._id, token);
 
     return res.redirect(
       `${process.env.FRONTEND_URL}/google-redirect?token=${token}`,
@@ -59,7 +59,7 @@ const googleRedirect = async (req, res) => {
 
   const token = user.createToken();
 
-  await userService.updateUserTokenById(user._id, { token });
+  await userService.updateUserTokenById(user._id, token);
 
   return res.redirect(
     `${process.env.FRONTEND_URL}/google-redirect?token=${token}`,
