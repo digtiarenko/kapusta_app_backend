@@ -14,12 +14,13 @@ router.post(
 );
 
 router.get('/', auth, ctrlWrapper(ctrlCategory.getAll));
+router.delete('/', auth, ctrlWrapper(ctrlCategory.deleteCategory));
 
 router.patch(
   '/',
   auth,
   checkRoles(['ADMIN']),
-  ctrlWrapper(ctrlCategory.getAll),
+  ctrlWrapper(ctrlCategory.updateDefault),
 );
 
 module.exports = router;

@@ -11,7 +11,10 @@
   },
   "consumes": ["application/json"],
   "produces": ["application/json"],
-  "servers": [{ "url": "http://localhost:5000/api" }, { "url": "heroku url" }],
+  "servers": [
+    { "url": "http://localhost:5000/api" },
+    { "url": "https://kapustaapplication.herokuapp.com/api/" }
+  ],
   "tags": [
     {
       "name": "Auth",
@@ -20,6 +23,10 @@
     {
       "name": "User",
       "description": "User endpoints"
+    },
+    {
+      "name": "Category",
+      "description": "Category endpoints"
     }
   ],
 
