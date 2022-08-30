@@ -13,7 +13,7 @@ router.post(
   ctrlWrapper(ctrlCategory.addCategory),
 );
 
-router.get('/', auth, ctrlWrapper(ctrlCategory.getAll));
+router.get('/', auth, ctrlWrapper(ctrlCategory.getCategoryList));
 router.delete('/', auth, ctrlWrapper(ctrlCategory.deleteCategory));
 
 router.patch(

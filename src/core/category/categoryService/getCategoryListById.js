@@ -1,11 +1,12 @@
-// const { Category } = require('../categoryModel');
+const { Category } = require('../categoryModel');
 
-// const getCategoryByName = async categoryList => {
-//   const result = await Category.find(
-//     { name: categoryName },
-//     '-createdAt -updatedAt',
-//   );
-//   return result;
-// };
+const getCategoryListById = async categoryList => {
+  const promises = categoryList.map(item => {
+    return Category.findById(item, 'name type');
+  });
+  const result = await Promise.all(promises);
 
-// module.exports = getCategoryByName;
+  return result;
+};
+
+module.exports = getCategoryListById;
