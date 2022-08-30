@@ -1,10 +1,12 @@
 const { Schema, model } = require('mongoose');
+const Joi = require('joi');
 
 const categorySchema = new Schema(
   {
     name: {
       type: String,
       required: true,
+      unique: true,
     },
     type: {
       type: String,
@@ -23,8 +25,17 @@ const categorySchema = new Schema(
   { versionKey: false, timestamps: true },
 );
 
+const addCategorySchema = Joi.object({
+  name: Joi.string().min(2).max(100).required(),
+  type: Joi.string().min(2).max(50).valid('expenses', 'income').required(),
+});
+
+const joiSchemas = {
+  add: addCategorySchema,
+};
 const Category = model('category', categorySchema);
 
 module.exports = {
   Category,
+  joiSchemas,
 };

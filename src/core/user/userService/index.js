@@ -4,6 +4,7 @@ const getUserByEmail = require('./getUserByEmail');
 const getUserById = require('./getUserById');
 const updateUserTokenById = require('./updateUserTokenById');
 const updateUserBalanceById = require('./updateUserBalanceById');
+const updateUserCategoriesById = require('./updateUserCategoriesById');
 
 module.exports = {
   addUser,
@@ -12,4 +13,5 @@ module.exports = {
   getUserById,
   updateUserTokenById,
   updateUserBalanceById,
+  updateUserCategoriesById,
 };

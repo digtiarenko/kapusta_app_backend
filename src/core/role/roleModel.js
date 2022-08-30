@@ -2,7 +2,7 @@ const { model, Schema } = require('mongoose');
 
 const roleSchema = Schema(
   {
-    value: {
+    name: {
       type: String,
       default: 'USER',
       unique: true,
@@ -10,5 +10,7 @@ const roleSchema = Schema(
   },
   { timestamps: true, versionKey: false },
 );
-
-module.exports = model('Role', roleSchema);
+const Role = model('Role', roleSchema);
+module.exports = {
+  Role,
+};

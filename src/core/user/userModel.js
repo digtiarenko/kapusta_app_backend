@@ -24,7 +24,18 @@ const userSchema = Schema(
       type: Number,
       default: 0,
     },
-    categories: [{ type: Schema.Types.ObjectId, ref: 'category' }],
+    categories: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Category',
+      },
+    ],
+    roles: [
+      {
+        type: String,
+        ref: 'Role',
+      },
+    ],
   },
   { versionKey: false, timestamps: true },
 );

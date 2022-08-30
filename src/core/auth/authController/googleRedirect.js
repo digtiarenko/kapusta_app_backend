@@ -2,6 +2,7 @@ const queryString = require('query-string');
 const axios = require('axios');
 const bcrypt = require('bcrypt');
 const userService = require('../../user/userService');
+const roleService = require('../../role/roleService');
 const { createError } = require('../../../helpers');
 
 const googleRedirect = async (req, res) => {
@@ -34,9 +35,11 @@ const googleRedirect = async (req, res) => {
 
   if (!user) {
     const hashPassword = await bcrypt.hash(id, Number(process.env.HASH_POWER));
+    const userRole = await roleService.getRoleByName('USER');
     const newUser = await userService.addUser({
       email,
       password: hashPassword,
+      roles: [userRole.name],
     });
 
     const token = newUser.createToken();

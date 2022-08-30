@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const userService = require('../../user/userService');
+const roleService = require('../../role/roleService');
 const { createError } = require('../../../helpers');
 
 const register = async (req, res) => {
@@ -12,10 +13,12 @@ const register = async (req, res) => {
     password,
     Number(process.env.HASH_POWER),
   );
-
+  const userRole = await roleService.getRoleByName('USER');
+  console.log('---------------------', userRole);
   const newUser = await userService.addUser({
     ...req.body,
     password: hashPassword,
+    roles: [userRole.name],
   });
 
   res.status(201).json({
