@@ -14,11 +14,19 @@ router.post(
 );
 
 router.get('/', auth, ctrlWrapper(ctrlCategory.getCategoryList));
-router.delete('/', auth, ctrlWrapper(ctrlCategory.deleteCategory));
+
+router.delete(
+  '/:categoryId',
+  auth,
+  validation(joiSchemas.deleteAndUpdate, 'params'),
+  ctrlWrapper(ctrlCategory.deleteCategory),
+);
 
 router.patch(
-  '/',
+  '/:categoryId',
   auth,
+  validation(joiSchemas.update),
+  validation(joiSchemas.deleteAndUpdate, 'params'),
   checkRoles(['ADMIN']),
   ctrlWrapper(ctrlCategory.updateDefault),
 );

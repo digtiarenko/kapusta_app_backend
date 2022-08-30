@@ -19,14 +19,11 @@ const addCategory = async (req, res) => {
     if (userHasCategory) {
       throw createError(409, 'User has this category at the list');
     }
-    updatedUser = await userService.updateUserCategoriesById(_id, category._id);
+    updatedUser = await userService.addUserCategoriesById(_id, category._id);
     res.status(200).json({ updatedUser });
   }
   const newCategory = await categoryService.addCategory({ ...req.body });
-  updatedUser = await userService.updateUserCategoriesById(
-    _id,
-    newCategory._id,
-  );
+  updatedUser = await userService.addUserCategoriesById(_id, newCategory._id);
   res.status(200).json({ updatedUser });
 };
 

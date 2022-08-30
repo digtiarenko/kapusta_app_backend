@@ -1,7 +1,7 @@
 const { User } = require('../userModel');
 
 const getUserById = async id => {
-  const result = await User.findById(id, '-createdAt -updatedAt');
+  const result = await User.findById(id);
   return result;
 };
 

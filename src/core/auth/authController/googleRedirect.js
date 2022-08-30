@@ -3,6 +3,7 @@ const axios = require('axios');
 const bcrypt = require('bcrypt');
 const userService = require('../../user/userService');
 const roleService = require('../../role/roleService');
+const categoryService = require('../../category/categoryService');
 const { createError } = require('../../../helpers');
 
 const googleRedirect = async (req, res) => {
@@ -37,11 +38,13 @@ const googleRedirect = async (req, res) => {
   if (!user) {
     const hashPassword = await bcrypt.hash(id, Number(process.env.HASH_POWER));
     const userRole = await roleService.getRoleByName('USER');
+    const categories = await categoryService.getDefaultCategory();
     const newUser = await userService.addUser({
       email,
       password: hashPassword,
       roles: [userRole.name],
       name,
+      categories,
     });
 
     const token = newUser.createToken();

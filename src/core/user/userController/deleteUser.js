@@ -6,11 +6,12 @@ const deleteUser = async (req, res) => {
 
   const user = await userService.deleteUserById(id);
   if (!user) {
-    createError(500, 'Server error');
+    throw createError(500, 'Server error');
   }
 
   res.status(200).json({
     message: 'User deleted successfully',
+    data: { user },
   });
 };
 module.exports = deleteUser;

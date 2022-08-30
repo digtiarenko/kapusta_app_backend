@@ -65,7 +65,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RegistrationErrorResponse"
+                  "$ref": "#/components/schemas/RegistrationAndLoginErrorResponse"
                 }
               }
             }
@@ -88,6 +88,7 @@
       "get": {
         "tags": ["Auth"],
         "summary": "Google registration and authentication",
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Successful operation (redirect to front-end with accessToken)",
@@ -103,16 +104,92 @@
 
     "/auth/login": {
       "post": {
-        "tags": ["Auth"]
+        "tags": ["Auth"],
+        "summary": "User authentication",
+        "parameters": [],
+
+        "requestBody": {
+          "description": "Login object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationAndLoginRequest"
+              }
+            }
+          }
+        },
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginSuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request(invalid request body)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationAndLoginErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Email doesn't exist / Password is wrong",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginErrorResponse"
+                }
+              }
+            }
+          }
+        }
       }
     },
 
     "/auth/logout": {
-      "get": {
+      "post": {
         "tags": ["Auth"],
-        "security": [{ "Bearer": [] }]
+        "summary": "Logout",
+        "security": [{ "Bearer": [] }],
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": "Successful operation",
+            "content": {}
+          },
+          "400": {
+            "description": "No token provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoTokenResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidTokenResponse"
+                }
+              }
+            }
+          }
+        }
       }
     },
+
     "/user": {
       "get": {
         "tags": ["User"],
@@ -248,7 +325,7 @@
   },
   "components": {
     "schemas": {
-      "RegistrationRequest": {
+      "RegistrationAndLoginRequest": {
         "type": "object",
         "required": ["email", "password"],
         "properties": {
@@ -269,12 +346,33 @@
         }
       },
 
+      "LoginSuccessResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "string",
+            "description": "user access token",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI1ZmMyMDg1YmQwOTM2NTI4MTA3Y2UyNzQiLCJzaWQiOiI1ZmMyZDJmY2UxZDIwNTA2NzAyYmRkMjIiLCJpYXQiOjE2MDY2MDM1MTYsImV4cCI6MTYwNjYwNzExNn0.rJ_QjU4KvA76H96RHsvOBChK0Vjbd0NmqjMxdQVJIXA"
+          }
+        }
+      },
+
       "UserInfo": {
         "type": "object",
         "properties": {
           "user": {
             "type": "object",
             "properties": {
+              "_id": {
+                "type": "string",
+                "description": "User's balance",
+                "example": "0"
+              },
+              "name": {
+                "type": "string",
+                "description": "User's balance",
+                "example": "0"
+              },
               "email": {
                 "type": "string",
                 "description": "User's email",
@@ -284,6 +382,16 @@
                 "type": "number",
                 "description": "User's balance",
                 "example": "0"
+              },
+              "categories": {
+                "type": "array",
+                "description": "User Categories",
+                "items": { "type": "string" }
+              },
+              "roles": {
+                "type": "array",
+                "description": "User Roles",
+                "items": { "type": "string" }
               }
             }
           }
@@ -296,12 +404,23 @@
         }
       },
 
-      "RegistrationErrorResponse": {
+      "RegistrationAndLoginErrorResponse": {
         "type": "object",
         "properties": {
           "message": {
             "type": "string",
             "description": "error message"
+          }
+        }
+      },
+
+      "LoginErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "error message",
+            "example": "Email or password wrong"
           }
         }
       },

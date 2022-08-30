@@ -55,6 +55,7 @@ userSchema.methods.comparePassword = async function (password) {
 userSchema.methods.createToken = function () {
   const payload = {
     id: this._id,
+    roles: this.roles,
   };
 
   return jwt.sign(payload, process.env.JWT_ACCESS_SECRET, {
@@ -62,7 +63,7 @@ userSchema.methods.createToken = function () {
   });
 };
 
-const registerSchema = Joi.object({
+const registerAndLoginSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(6).required(),
 });
@@ -72,7 +73,7 @@ const updateBalanceSchema = Joi.object({
 });
 
 const joiSchemas = {
-  register: registerSchema,
+  registerAndLogin: registerAndLoginSchema,
   balance: updateBalanceSchema,
 };
 
