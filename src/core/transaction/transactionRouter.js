@@ -11,6 +11,7 @@ router.get('/income', ctrlWrapper(ctrlTransaction.getIncomeTransactions));
 
 router.post(
   '/expense/:categoryId',
+  auth,
   ctrlWrapper(ctrlTransaction.addExpenseTransaction),
 );
 
