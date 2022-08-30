@@ -32,6 +32,7 @@ const googleRedirect = async (req, res) => {
 
   const { id, email } = userData.data;
   const user = await userService.getUserByEmail(email);
+  const name = email.slice(0, email.indexOf('@'));
 
   if (!user) {
     const hashPassword = await bcrypt.hash(id, Number(process.env.HASH_POWER));
@@ -40,6 +41,7 @@ const googleRedirect = async (req, res) => {
       email,
       password: hashPassword,
       roles: [userRole.name],
+      name,
     });
 
     const token = newUser.createToken();
