@@ -25,9 +25,7 @@ const login = async (req, res) => {
   await userService.updateUserById(user._id, token);
 
   res.status(200).json({
-    data: {
-      token,
-    },
+    token,
   });
 };
 
