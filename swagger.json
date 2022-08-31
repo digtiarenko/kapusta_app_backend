@@ -388,18 +388,34 @@
             }
           }
         }
-      },
-
+      }
+    },
+    "/transactions/{type}": {
       "get": {
         "tags": ["Transaction"],
-        "summary": "Get user transactions (Route in development)",
-        "parameters": [],
+        "summary": "Get user transactions",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "path",
+            "description": "Transaction type ",
+            "required": true,
+            "type": "string",
+            "example": "income"
+          }
+        ],
         "security": [{ "Bearer": [] }],
 
         "responses": {
           "200": {
             "description": "Successful operation",
-            "content": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionListObject"
+                }
+              }
+            }
           },
           "400": {
             "description": "No token provided",
@@ -416,7 +432,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InvalidTokenResponse"
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundTransactionResponse"
                 }
               }
             }
@@ -475,7 +501,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/NotFoundError"
+                  "$ref": "#/components/schemas/NotFoundTransactionResponse"
                 }
               }
             }
@@ -1019,6 +1045,21 @@
           }
         }
       },
+      "TransactionList": {
+        "type": "array",
+        "description": "User categories list",
+        "items": {
+          "$ref": "#/components/schemas/TransactionInfo"
+        }
+      },
+
+      "TransactionListObject": {
+        "type": "object",
+        "description": "User transactions",
+        "properties": {
+          "categoryList": { "$ref": "#/components/schemas/TransactionList" }
+        }
+      },
 
       "CreateTransactionRequest": {
         "type": "object",
@@ -1067,6 +1108,15 @@
             "example": "Transaction created successfully"
           },
           "user": { "$ref": "#/components/schemas/TransactionInfo" }
+        }
+      },
+
+      "GetTransactionResponse": {
+        "type": "object",
+        "properties": {
+          "transactions": {
+            "$ref": "#/components/schemas/TransactionListObject"
+          }
         }
       },
 
