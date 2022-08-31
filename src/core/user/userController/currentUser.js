@@ -6,7 +6,7 @@ const currentUser = async (req, res) => {
     throw createError(500, 'Server error');
   }
   res.status(200).json({
-    user,
+    user: req.user,
   });
 };
 

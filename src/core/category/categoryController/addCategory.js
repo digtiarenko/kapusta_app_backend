@@ -21,14 +21,14 @@ const addCategory = async (req, res) => {
     }
     user = await userService.addUserCategoriesById(_id, category._id);
     res.status(200).json({
-      message: 'Category added',
+      message: 'Category added successfully',
       user,
     });
   }
   const newCategory = await categoryService.addCategory({ ...req.body });
   user = await userService.addUserCategoriesById(_id, newCategory._id);
   res.status(200).json({
-    message: 'Category added',
+    message: 'Category added successfully',
     user,
   });
 };

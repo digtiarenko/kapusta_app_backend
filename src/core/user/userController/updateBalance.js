@@ -7,7 +7,8 @@ const updateBalance = async (req, res) => {
   const user = await userService.updateUserBalanceById(id, balance);
 
   res.status(200).json({
-    balance: user.balance,
+    message: 'Balance updated successfully',
+    user,
   });
 };
 module.exports = updateBalance;

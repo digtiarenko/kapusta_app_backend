@@ -10,7 +10,7 @@ const deleteCategory = async (req, res) => {
     throw createError(404);
   }
   if (category.default === true) {
-    throw createError(403, 'It is default. You have no permitions');
+    throw createError(403, 'It is default. You have no permission');
   }
   const user = await userService.deleteUserCategoriesById(id, categoryId);
 
@@ -19,7 +19,7 @@ const deleteCategory = async (req, res) => {
     throw createError(404);
   }
   res.status(200).json({
-    message: 'Category deleted',
+    message: 'Category deleted successfully',
     user,
   });
 };

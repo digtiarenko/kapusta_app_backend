@@ -62,7 +62,7 @@ const addTransactionSchema = Joi.object({
 });
 
 const deleteTransactionSchema = Joi.object({
-  categoryId: Joi.string()
+  transactionId: Joi.string()
     .custom((value, helpers) => {
       const isValidObjectId = mongoose.Types.ObjectId.isValid(value);
       if (!isValidObjectId) {
