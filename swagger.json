@@ -342,6 +342,7 @@
         "summary": "Create user transactions",
 
         "parameters": [],
+        "security": [{ "Bearer": [] }],
 
         "requestBody": {
           "description": "Transaction object",
