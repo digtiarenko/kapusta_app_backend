@@ -6,7 +6,10 @@ const addExpenseTransaction = async (req, res) => {
     ...req.body,
     owner: _id,
   });
-  res.status(201).json({ transaction });
+  res.status(201).json({
+    message: 'Transaction created successfully',
+    transaction,
+  });
 };
 
 module.exports = addExpenseTransaction;

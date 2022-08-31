@@ -26,11 +26,8 @@ const register = async (req, res) => {
   });
 
   res.status(201).json({
-    user: {
-      name: newUser.name,
-      email: newUser.email,
-      balance: newUser.balance,
-    },
+    message: 'Registration Success',
+    email: newUser.email,
   });
 };
 

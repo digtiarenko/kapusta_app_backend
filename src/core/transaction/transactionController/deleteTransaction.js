@@ -4,6 +4,7 @@ const transactionService = require('../transactionService');
 
 const deleteTransaction = async (req, res) => {
   const { transactionId } = req.params;
+  console.log(transactionId);
 
   const result = await transactionService.deleteTransactionById(transactionId);
   if (!result) {
@@ -11,7 +12,7 @@ const deleteTransaction = async (req, res) => {
   }
 
   res.status(200).json({
-    message: 'Transaction deleted',
+    message: 'Transaction deleted successfully',
     transaction: result,
   });
 };
