@@ -4,7 +4,7 @@ const Joi = require('joi');
 const { Schema, model } = mongoose;
 
 const dateRegexp =
-  /((19|2\d)\d\d)-((0?[1-9])|(1[0-2]))-((0?[1-9])|([12]\d)|(3[01]))/;
+  /^((19|2\d)\d\d)-((0?[1-9])|(1[0-2]))-((0?[1-9])|([12]\d)|(3[01]))$/;
 
 const transactionSchema = new Schema(
   {
@@ -49,17 +49,6 @@ const addTransactionSchema = Joi.object({
   value: Joi.number().required(),
   type: Joi.string().valid('expenses', 'income').required(),
   category: Joi.string()
-    .custom((value, helpers) => {
-      const isValidObjectId = mongoose.Types.ObjectId.isValid(value);
-      if (!isValidObjectId) {
-        return helpers.message({
-          custom: "Invalid 'categoryId'. Must be a MongoDB ObjectId",
-        });
-      }
-      return value;
-    })
-    .required(),
-  owner: Joi.string()
     .custom((value, helpers) => {
       const isValidObjectId = mongoose.Types.ObjectId.isValid(value);
       if (!isValidObjectId) {

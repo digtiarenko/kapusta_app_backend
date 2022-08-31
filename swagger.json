@@ -917,7 +917,7 @@
           "category": {
             "type": "string",
             "description": "Transaction category ID",
-            "example": "630e3273144cc4543b17742f"
+            "example": "630d23089692d4e9360ec34d"
           },
           "value": {
             "type": "number",
@@ -940,7 +940,7 @@
             "_id": "630e5122be86e9879b691ce7",
             "date": "2022-08-30",
             "description": "Beef",
-            "category": "630e3273144cc4543b17742f",
+            "category": "630d23089692d4e9360ec34d",
             "value": 2749,
             "type": "expenses",
             "owner": "630d52884e71b290d419aad3",
@@ -998,7 +998,7 @@
             "_id": "630e5122be86e9879b691ce7",
             "date": "2022-08-30",
             "description": "Beef",
-            "category": "630e3273144cc4543b17742f",
+            "category": "630d23089692d4e9360ec34d",
             "value": 2749,
             "type": "expenses",
             "owner": "630d52884e71b290d419aad3",
@@ -1010,45 +1010,38 @@
       "CreateTransactionRequest": {
         "type": "object",
         "properties": {
-          "transaction": {
-            "type": "object",
-            "properties": {
-              "date": {
-                "type": "string",
-                "description": "Transaction date",
-                "example": "1999-11-25"
-              },
-              "description": {
-                "type": "string",
-                "description": "Transaction description",
-                "example": "Beef"
-              },
-              "category": {
-                "type": "string",
-                "description": "Transaction category ID",
-                "example": "630e3273144cc4543b17742f"
-              },
-              "value": {
-                "type": "number",
-                "description": "Transaction amount",
-                "example": "0"
-              },
-              "type": {
-                "type": "string",
-                "description": "Transaction type",
-                "example": "expenses"
-              }
-            }
+          "date": {
+            "type": "string",
+            "description": "Transaction date",
+            "example": "1999-11-25"
+          },
+          "description": {
+            "type": "string",
+            "description": "Transaction description",
+            "example": "Beef"
+          },
+          "category": {
+            "type": "string",
+            "description": "Transaction category ID",
+            "example": "630d23089692d4e9360ec34d"
+          },
+          "value": {
+            "type": "number",
+            "description": "Transaction amount",
+            "example": "0"
+          },
+          "type": {
+            "type": "string",
+            "description": "Transaction type",
+            "example": "expenses"
           }
         },
         "example": {
-          "transaction": {
-            "date": "2022-08-30",
-            "description": "Beef",
-            "category": "630e3273144cc4543b17742f",
-            "value": 2749,
-            "type": "expenses"
-          }
+          "date": "2022-08-31",
+          "description": "Beef",
+          "category": "630d23089692d4e9360ec34d",
+          "value": 300,
+          "type": "expenses"
         }
       },
 
@@ -1096,8 +1089,8 @@
           "transaction": {
             "date": "2022-08-30",
             "description": "Beef",
-            "category": "630e3273144cc4543b17742f",
-            "value": 2749,
+            "category": "630d23089692d4e9360ec34d",
+            "value": 300,
             "type": "expenses"
           }
         }
