@@ -1,8 +1,8 @@
-const {createError} = require('../../../helpers');
+const { createError } = require('../../../helpers');
 
-const transactionService = require('../transactionService')
+const transactionService = require('../transactionService');
 
-const deleteTransaction = async(req, res) => {
+const deleteTransaction = async (req, res) => {
   const { transactionId } = req.params;
 
   const result = await transactionService.deleteTransactionById(transactionId);
@@ -11,8 +11,8 @@ const deleteTransaction = async(req, res) => {
   }
 
   res.status(200).json({
-    message: 'transaction deleted',
-    data: { result },
+    message: 'Transaction deleted',
+    transaction: result,
   });
 };
 

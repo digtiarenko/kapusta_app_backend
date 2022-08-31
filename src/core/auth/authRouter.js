@@ -8,11 +8,15 @@ const router = express.Router();
 
 router.post(
   '/register',
-  validation(joiSchemas.register),
+  validation(joiSchemas.registerAndLogin),
   ctrlWrapper(ctrlAuth.register),
 );
 
-router.post('/login', ctrlWrapper(ctrlAuth.login));
+router.post(
+  '/login',
+  validation(joiSchemas.registerAndLogin),
+  ctrlWrapper(ctrlAuth.login),
+);
 
 router.get('/google', ctrlWrapper(ctrlAuth.googleAuth));
 
