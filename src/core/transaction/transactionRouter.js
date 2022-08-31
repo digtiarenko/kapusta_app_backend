@@ -12,7 +12,7 @@ router.post(
   ctrlWrapper(ctrlTransaction.addTransaction),
 );
 
-router.get('/:type', ctrlWrapper(ctrlTransaction.getTransactions));
+router.get('/:type', auth, ctrlWrapper(ctrlTransaction.getTransactions));
 
 router.delete(
   '/:transactionId',
