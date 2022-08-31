@@ -25,6 +25,14 @@
       "description": "User endpoints"
     },
     {
+      "name": "Transaction",
+      "description": "Transaction endpoints"
+    },
+    {
+      "name": "Report",
+      "description": "Report endpoints"
+    },
+    {
       "name": "Category",
       "description": "Category endpoints"
     }
@@ -35,7 +43,6 @@
       "post": {
         "tags": ["Auth"],
         "summary": "User registration",
-
         "parameters": [],
 
         "requestBody": {
@@ -44,18 +51,19 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RegistrationRequest"
+                "$ref": "#/components/schemas/RegistrationAndLoginRequest"
               }
             }
           }
         },
+
         "responses": {
           "201": {
             "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserInfo"
+                  "$ref": "#/components/schemas/UserObject"
                 }
               }
             }
@@ -65,7 +73,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RegistrationAndLoginErrorResponse"
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -89,6 +97,7 @@
         "tags": ["Auth"],
         "summary": "Google registration and authentication",
         "parameters": [],
+
         "responses": {
           "200": {
             "description": "Successful operation (redirect to front-end with accessToken)",
@@ -136,7 +145,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RegistrationAndLoginErrorResponse"
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -161,6 +170,7 @@
         "summary": "Logout",
         "security": [{ "Bearer": [] }],
         "parameters": [],
+
         "responses": {
           "204": {
             "description": "Successful operation",
@@ -196,13 +206,14 @@
         "summary": "Get user info",
         "parameters": [],
         "security": [{ "Bearer": [] }],
+
         "responses": {
           "200": {
             "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserInfo"
+                  "$ref": "#/components/schemas/UserObject"
                 }
               }
             }
@@ -229,11 +240,13 @@
           }
         }
       },
+
       "delete": {
         "tags": ["User"],
         "summary": "Clear all user info",
         "parameters": [],
         "security": [{ "Bearer": [] }],
+
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -268,11 +281,11 @@
         }
       }
     },
+
     "/user/balance": {
       "patch": {
         "tags": ["User"],
         "summary": "Update user balance",
-
         "parameters": [],
         "security": [{ "Bearer": [] }],
 
@@ -294,7 +307,375 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserInfo"
+                  "$ref": "#/components/schemas/UserObject"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No token provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoTokenResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidTokenResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/transactions": {
+      "post": {
+        "tags": ["Transaction"],
+        "summary": "Create user transactions",
+
+        "parameters": [],
+
+        "requestBody": {
+          "description": "Transaction object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTransactionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionObject"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidTokenResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+
+      "get": {
+        "tags": ["Transaction"],
+        "summary": "Get user transactions",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {}
+          },
+          "400": {
+            "description": "No token provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoTokenResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidTokenResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+
+      "delete": {
+        "tags": ["Transaction"],
+        "summary": "Delete transactions",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteTransactionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No token provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoTokenResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidTokenResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/reports": {
+      "get": {
+        "tags": ["Report"],
+        "summary": "Get full report",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {}
+          },
+          "400": {
+            "description": "No token provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoTokenResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidTokenResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/reports/monthly-expense": {
+      "get": {
+        "tags": ["Report"],
+        "summary": "Get expense reports by month",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {}
+          },
+          "400": {
+            "description": "No token provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoTokenResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidTokenResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/reports/monthly-income": {
+      "get": {
+        "tags": ["Report"],
+        "summary": "Get income reports by month",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {}
+          },
+          "400": {
+            "description": "No token provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoTokenResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidTokenResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/categories": {
+      "get": {
+        "tags": ["Category"],
+        "summary": "Get user category list",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryListObject"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No token provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoTokenResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidTokenResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+
+      "post": {
+        "tags": ["Category"],
+        "summary": "Add user category to category list",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+
+        "requestBody": {
+          "description": "Category object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddCategoryRequest"
+              }
+            }
+          }
+        },
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddCategoryResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No token provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoTokenResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidTokenResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+
+      "delete": {
+        "tags": ["Category"],
+        "summary": "Delete category from user category list",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteCategoryResponse"
                 }
               }
             }
@@ -325,6 +706,545 @@
   },
   "components": {
     "schemas": {
+      "UserInfo": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "User ID",
+            "example": "630e5122be86e9879b691ce7"
+          },
+          "name": {
+            "type": "string",
+            "description": "User name",
+            "example": "test"
+          },
+          "email": {
+            "type": "string",
+            "description": "User email",
+            "format": "email",
+            "example": "test@gmail.com"
+          },
+          "token": {
+            "type": "string",
+            "description": "User access token",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMGU1MTIyYmU4NmU5ODc5YjY5MWNlNyIsInJvbGVzIjpbIlVTRVIiXSwiaWF0IjoxNjYxODk3MTkxLCJleHAiOjE2NjE5NDAzOTF9.7ExJjGyTzewlvehfunLc2PiRM6Yl_P0tII_rkSEmTJE"
+          },
+          "balance": {
+            "type": "number",
+            "description": "User balance",
+            "example": "0"
+          },
+          "categories": {
+            "type": "array",
+            "description": "User categories list",
+            "items": { "type": "string" }
+          },
+          "roles": {
+            "type": "array",
+            "description": "User Roles",
+            "items": { "type": "string" }
+          }
+        },
+        "example": {
+          "_id": "630e5122be86e9879b691ce7",
+          "name": "aleksander.nikolaenko.test",
+          "email": "aleksander.nikolaenko.test@gmail.com",
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMGU1MTIyYmU4NmU5ODc5YjY5MWNlNyIsInJvbGVzIjpbIlVTRVIiXSwiaWF0IjoxNjYxODk3MTkxLCJleHAiOjE2NjE5NDAzOTF9.7ExJjGyTzewlvehfunLc2PiRM6Yl_P0tII_rkSEmTJE",
+          "balance": 274987,
+          "categories": [
+            "630d23089692d4e9360ec34d",
+            "630d4b6b1a5a5fef811d9a80",
+            "630d4d6b78f7810c7f73a07b",
+            "630d4e522e4567c937d21b73",
+            "630d5145c0670a69b1b72a7f",
+            "630d5162c0670a69b1b72a85",
+            "630d525f4e71b290d419aac9",
+            "630d52734e71b290d419aace",
+            "630d52884e71b290d419aad3",
+            "630d52984e71b290d419aad8",
+            "630d52a14e71b290d419aadd",
+            "630d52b74e71b290d419aae2",
+            "630d52c34e71b290d419aae7",
+            "630e3273144cc4543b17742f"
+          ],
+          "roles": ["USER"],
+          "createdAt": "2022-08-30T18:04:18.596Z"
+        }
+      },
+
+      "UserObject": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "description": "User ID",
+                "example": "630e5122be86e9879b691ce7"
+              },
+              "name": {
+                "type": "string",
+                "description": "User name",
+                "example": "test"
+              },
+              "email": {
+                "type": "string",
+                "description": "User email",
+                "format": "email",
+                "example": "test@gmail.com"
+              },
+              "token": {
+                "type": "string",
+                "description": "User access token",
+                "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMGU1MTIyYmU4NmU5ODc5YjY5MWNlNyIsInJvbGVzIjpbIlVTRVIiXSwiaWF0IjoxNjYxODk3MTkxLCJleHAiOjE2NjE5NDAzOTF9.7ExJjGyTzewlvehfunLc2PiRM6Yl_P0tII_rkSEmTJE"
+              },
+              "balance": {
+                "type": "number",
+                "description": "User balance",
+                "example": "0"
+              },
+              "categories": {
+                "type": "array",
+                "description": "User categories list",
+                "items": { "type": "string" }
+              },
+              "roles": {
+                "type": "array",
+                "description": "User Roles",
+                "items": { "type": "string" }
+              }
+            },
+            "example": {
+              "_id": "630e5122be86e9879b691ce7",
+              "name": "aleksander.nikolaenko.test",
+              "email": "aleksander.nikolaenko.test@gmail.com",
+              "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMGU1MTIyYmU4NmU5ODc5YjY5MWNlNyIsInJvbGVzIjpbIlVTRVIiXSwiaWF0IjoxNjYxODk3MTkxLCJleHAiOjE2NjE5NDAzOTF9.7ExJjGyTzewlvehfunLc2PiRM6Yl_P0tII_rkSEmTJE",
+              "balance": 274987,
+              "categories": [
+                "630d23089692d4e9360ec34d",
+                "630d4b6b1a5a5fef811d9a80",
+                "630d4d6b78f7810c7f73a07b",
+                "630d4e522e4567c937d21b73",
+                "630d5145c0670a69b1b72a7f",
+                "630d5162c0670a69b1b72a85",
+                "630d525f4e71b290d419aac9",
+                "630d52734e71b290d419aace",
+                "630d52884e71b290d419aad3",
+                "630d52984e71b290d419aad8",
+                "630d52a14e71b290d419aadd",
+                "630d52b74e71b290d419aae2",
+                "630d52c34e71b290d419aae7",
+                "630e3273144cc4543b17742f"
+              ],
+              "roles": ["USER"],
+              "createdAt": "2022-08-30T18:04:18.596Z"
+            }
+          }
+        },
+        "example": {
+          "user": {
+            "_id": "630e5122be86e9879b691ce7",
+            "name": "aleksander.nikolaenko.test",
+            "email": "aleksander.nikolaenko.test@gmail.com",
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMGU1MTIyYmU4NmU5ODc5YjY5MWNlNyIsInJvbGVzIjpbIlVTRVIiXSwiaWF0IjoxNjYxODk3MTkxLCJleHAiOjE2NjE5NDAzOTF9.7ExJjGyTzewlvehfunLc2PiRM6Yl_P0tII_rkSEmTJE",
+            "balance": 274987,
+            "categories": [
+              "630d23089692d4e9360ec34d",
+              "630d4b6b1a5a5fef811d9a80",
+              "630d4d6b78f7810c7f73a07b",
+              "630d4e522e4567c937d21b73",
+              "630d5145c0670a69b1b72a7f",
+              "630d5162c0670a69b1b72a85",
+              "630d525f4e71b290d419aac9",
+              "630d52734e71b290d419aace",
+              "630d52884e71b290d419aad3",
+              "630d52984e71b290d419aad8",
+              "630d52a14e71b290d419aadd",
+              "630d52b74e71b290d419aae2",
+              "630d52c34e71b290d419aae7",
+              "630e3273144cc4543b17742f"
+            ],
+            "roles": ["USER"],
+            "createdAt": "2022-08-30T18:04:18.596Z"
+          }
+        }
+      },
+
+      "UserDeleteResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "message",
+            "example": "User deleted"
+          },
+          "user": { "$ref": "#/components/schemas/UserInfo" }
+        }
+      },
+
+      "UserBalanceRequest": {
+        "type": "object",
+        "properties": {
+          "balance": {
+            "type": "number",
+            "description": "User's balance",
+            "example": "123.45"
+          }
+        }
+      },
+
+      "TransactionInfo": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Transaction ID",
+            "example": "630e3273144cc4543b17742f"
+          },
+          "date": {
+            "type": "string",
+            "description": "Transaction date",
+            "example": "1999-11-25"
+          },
+          "description": {
+            "type": "string",
+            "description": "Transaction description",
+            "example": "Beef"
+          },
+          "category": {
+            "type": "string",
+            "description": "Transaction category ID",
+            "example": "630e3273144cc4543b17742f"
+          },
+          "value": {
+            "type": "number",
+            "description": "Transaction amount",
+            "example": "0"
+          },
+          "type": {
+            "type": "string",
+            "description": "Transaction type",
+            "example": "expenses"
+          },
+          "owner": {
+            "type": "array",
+            "description": "Transaction owner ID",
+            "example": "630e3273144cc4543b17742f"
+          }
+        },
+        "example": {
+          "transaction": {
+            "_id": "630e5122be86e9879b691ce7",
+            "date": "2022-08-30",
+            "description": "Beef",
+            "category": "630e3273144cc4543b17742f",
+            "value": 2749,
+            "type": "expenses",
+            "owner": "630d52884e71b290d419aad3",
+            "createdAt": "2022-08-30T18:04:18.596Z"
+          }
+        }
+      },
+
+      "TransactionObject": {
+        "type": "object",
+        "properties": {
+          "transaction": {
+            "_id": {
+              "type": "string",
+              "description": "Transaction ID",
+              "example": "630e3273144cc4543b17742f"
+            },
+            "type": "object",
+            "properties": {
+              "date": {
+                "type": "string",
+                "description": "Transaction date",
+                "example": "1999-11-25"
+              },
+              "description": {
+                "type": "string",
+                "description": "Transaction description",
+                "example": "Beef"
+              },
+              "category": {
+                "type": "string",
+                "description": "Transaction category ID",
+                "example": "630e3273144cc4543b17742f"
+              },
+              "value": {
+                "type": "number",
+                "description": "Transaction amount",
+                "example": "0"
+              },
+              "type": {
+                "type": "string",
+                "description": "Transaction type",
+                "example": "expenses"
+              },
+              "owner": {
+                "type": "array",
+                "description": "Transaction owner ID",
+                "example": "630e3273144cc4543b17742f"
+              }
+            }
+          }
+        },
+        "example": {
+          "transaction": {
+            "_id": "630e5122be86e9879b691ce7",
+            "date": "2022-08-30",
+            "description": "Beef",
+            "category": "630e3273144cc4543b17742f",
+            "value": 2749,
+            "type": "expenses",
+            "owner": "630d52884e71b290d419aad3",
+            "createdAt": "2022-08-30T18:04:18.596Z"
+          }
+        }
+      },
+
+      "CreateTransactionRequest": {
+        "type": "object",
+        "properties": {
+          "transaction": {
+            "type": "object",
+            "properties": {
+              "date": {
+                "type": "string",
+                "description": "Transaction date",
+                "example": "1999-11-25"
+              },
+              "description": {
+                "type": "string",
+                "description": "Transaction description",
+                "example": "Beef"
+              },
+              "category": {
+                "type": "string",
+                "description": "Transaction category ID",
+                "example": "630e3273144cc4543b17742f"
+              },
+              "value": {
+                "type": "number",
+                "description": "Transaction amount",
+                "example": "0"
+              },
+              "type": {
+                "type": "string",
+                "description": "Transaction type",
+                "example": "expenses"
+              }
+            }
+          }
+        },
+        "example": {
+          "transaction": {
+            "date": "2022-08-30",
+            "description": "Beef",
+            "category": "630e3273144cc4543b17742f",
+            "value": 2749,
+            "type": "expenses"
+          }
+        }
+      },
+
+      "DeleteTransactionResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Transaction delete message",
+            "example": "Transactions deleted"
+          },
+          "transaction": {
+            "type": "object",
+            "properties": {
+              "date": {
+                "type": "string",
+                "description": "Transaction date",
+                "example": "1999-11-25"
+              },
+              "description": {
+                "type": "string",
+                "description": "Transaction description",
+                "example": "Beef"
+              },
+              "category": {
+                "type": "string",
+                "description": "Transaction category ID",
+                "example": "630e3273144cc4543b17742f"
+              },
+              "value": {
+                "type": "number",
+                "description": "Transaction amount",
+                "example": "0"
+              },
+              "type": {
+                "type": "string",
+                "description": "Transaction type",
+                "example": "expenses"
+              }
+            }
+          }
+        },
+        "example": {
+          "message": "Transactions deleted",
+          "transaction": {
+            "date": "2022-08-30",
+            "description": "Beef",
+            "category": "630e3273144cc4543b17742f",
+            "value": 2749,
+            "type": "expenses"
+          }
+        }
+      },
+
+      "CategoryInfo": {
+        "type": "object",
+        "description": "User category",
+        "properties": {
+          "properties": {
+            "_id": {
+              "type": "string",
+              "description": "Category ID",
+              "example": "630d23089692d4e9360ec34d"
+            },
+            "name": {
+              "type": "string",
+              "description": "Category name",
+              "example": "Products"
+            },
+            "type": {
+              "type": "string",
+              "description": "Category type",
+              "example": "expenses"
+            },
+            "default": {
+              "type": "boolean",
+              "description": "Category is default",
+              "example": true
+            }
+          }
+        },
+        "example": {
+          "_id": "630d5145c0670a69b1b72a7f",
+          "name": "Transport",
+          "type": "expenses",
+          "default": true
+        }
+      },
+
+      "CategoryList": {
+        "type": "array",
+        "description": "User categories list",
+        "items": {
+          "type": "object",
+          "description": "User category",
+          "properties": {
+            "_id": {
+              "type": "string",
+              "description": "Category ID",
+              "example": "630d23089692d4e9360ec34d"
+            },
+            "name": {
+              "type": "string",
+              "description": "Category name",
+              "example": "Products"
+            },
+            "type": {
+              "type": "string",
+              "description": "Category type",
+              "example": "expenses"
+            },
+            "default": {
+              "type": "boolean",
+              "description": "Category is default",
+              "example": true
+            }
+          }
+        },
+        "example": [
+          {
+            "_id": "630d23089692d4e9360ec34d",
+            "name": "Products",
+            "type": "expenses",
+            "default": true
+          },
+          {
+            "_id": "630d4b6b1a5a5fef811d9a80",
+            "name": "Alcohol",
+            "type": "expenses",
+            "default": true
+          },
+          {
+            "_id": "630d4e522e4567c937d21b73",
+            "name": "Health",
+            "type": "expenses",
+            "default": true
+          }
+        ]
+      },
+
+      "CategoryListObject": {
+        "type": "object",
+        "description": "User category",
+        "properties": {
+          "categoryList": { "$ref": "#/components/schemas/CategoryList" }
+        }
+      },
+
+      "AddCategoryRequest": {
+        "type": "object",
+        "description": "User category",
+        "properties": {
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Category name",
+              "example": "Products"
+            },
+            "type": {
+              "type": "string",
+              "description": "Category type",
+              "example": "expenses"
+            }
+          }
+        },
+        "example": {
+          "name": "Transport",
+          "type": "expenses"
+        }
+      },
+
+      "AddCategoryResponse": {
+        "type": "object",
+        "description": "User category",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Category add response message",
+            "example": "Category added"
+          },
+          "user": { "$ref": "#/components/schemas/UserInfo" }
+        }
+      },
+
+      "DeleteCategoryResponse": {
+        "type": "object",
+        "description": "User category",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Category delete response message",
+            "example": "Category deleted"
+          },
+          "user": { "$ref": "#/components/schemas/UserInfo" }
+        }
+      },
+
       "RegistrationAndLoginRequest": {
         "type": "object",
         "required": ["email", "password"],
@@ -346,6 +1266,17 @@
         }
       },
 
+      "RegistrationConflictResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "error message",
+            "example": "Email in use"
+          }
+        }
+      },
+
       "LoginSuccessResponse": {
         "type": "object",
         "properties": {
@@ -357,63 +1288,6 @@
         }
       },
 
-      "UserInfo": {
-        "type": "object",
-        "properties": {
-          "user": {
-            "type": "object",
-            "properties": {
-              "_id": {
-                "type": "string",
-                "description": "User's balance",
-                "example": "0"
-              },
-              "name": {
-                "type": "string",
-                "description": "User's balance",
-                "example": "0"
-              },
-              "email": {
-                "type": "string",
-                "description": "User's email",
-                "format": "email"
-              },
-              "balance": {
-                "type": "number",
-                "description": "User's balance",
-                "example": "0"
-              },
-              "categories": {
-                "type": "array",
-                "description": "User Categories",
-                "items": { "type": "string" }
-              },
-              "roles": {
-                "type": "array",
-                "description": "User Roles",
-                "items": { "type": "string" }
-              }
-            }
-          }
-        },
-        "example": {
-          "user": {
-            "email": "user@example.com",
-            "balance": 0
-          }
-        }
-      },
-
-      "RegistrationAndLoginErrorResponse": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string",
-            "description": "error message"
-          }
-        }
-      },
-
       "LoginErrorResponse": {
         "type": "object",
         "properties": {
@@ -421,17 +1295,6 @@
             "type": "string",
             "description": "error message",
             "example": "Email or password wrong"
-          }
-        }
-      },
-
-      "RegistrationConflictResponse": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string",
-            "description": "error message",
-            "example": "Email in use"
           }
         }
       },
@@ -458,23 +1321,12 @@
         }
       },
 
-      "UserDeleteResponse": {
+      "ErrorResponse": {
         "type": "object",
         "properties": {
           "message": {
             "type": "string",
-            "description": "message",
-            "example": "User deleted successfully"
-          }
-        }
-      },
-      "UserBalanceRequest": {
-        "type": "object",
-        "properties": {
-          "balance": {
-            "type": "number",
-            "description": "User's balance",
-            "example": "123.45"
+            "description": "error message"
           }
         }
       }

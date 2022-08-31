@@ -1,11 +1,9 @@
-const getExpenseReport = require('./getExpenseReport');
-const getIncomeReport = require('./getIncomeReport');
 const getExpenseReportByMonth = require('./getExpenseReportByMonth');
 const getIncomeReportByMonth = require('./getIncomeReportByMonth');
+const getFullReportByMonth = require('./getFullReportByMonth');
 
 module.exports = {
-  getExpenseReport,
-  getIncomeReport,
   getExpenseReportByMonth,
   getIncomeReportByMonth,
+  getFullReportByMonth,
 };

@@ -1,29 +1,23 @@
 const express = require('express');
 const { ctrlWrapper } = require('../../helpers');
 const ctrlTransaction = require('./transactionController');
-const { auth } = require('../../middleware');
-
+const { auth, validation } = require('../../middleware');
+const { joiSchemas } = require('./transactionModel');
 const router = express.Router();
 
-router.get('/expense', ctrlWrapper(ctrlTransaction.getExpenseTransactions));
-
-router.get('/income', ctrlWrapper(ctrlTransaction.getIncomeTransactions));
-
 router.post(
-  '/expense/:categoryId',
+  '/',
   auth,
-  ctrlWrapper(ctrlTransaction.addExpenseTransaction),
+  validation(joiSchemas.add),
+  ctrlWrapper(ctrlTransaction.addTransaction),
 );
 
-router.post(
-  '/income/:categoryId',
-  auth,
-  ctrlWrapper(ctrlTransaction.addIncomeTransaction),
-);
+router.get('/:type', ctrlWrapper(ctrlTransaction.getTransactions));
 
 router.delete(
   '/:transactionId',
   auth,
+  validation(joiSchemas.delete, 'params'),
   ctrlWrapper(ctrlTransaction.deleteTransaction),
 );
 
