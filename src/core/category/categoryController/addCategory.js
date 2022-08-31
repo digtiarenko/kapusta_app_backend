@@ -5,7 +5,7 @@ const { createError } = require('../../../helpers');
 const addCategory = async (req, res) => {
   const { name } = req.body;
   const { _id, categories } = req.user;
-  let updatedUser = null;
+  let user = null;
   console.log(categories.length);
   if (categories.length >= 15) {
     throw createError(
@@ -19,12 +19,18 @@ const addCategory = async (req, res) => {
     if (userHasCategory) {
       throw createError(409, 'User has this category at the list');
     }
-    updatedUser = await userService.addUserCategoriesById(_id, category._id);
-    res.status(200).json({ updatedUser });
+    user = await userService.addUserCategoriesById(_id, category._id);
+    res.status(200).json({
+      message: 'Category added',
+      user,
+    });
   }
   const newCategory = await categoryService.addCategory({ ...req.body });
-  updatedUser = await userService.addUserCategoriesById(_id, newCategory._id);
-  res.status(200).json({ updatedUser });
+  user = await userService.addUserCategoriesById(_id, newCategory._id);
+  res.status(200).json({
+    message: 'Category added',
+    user,
+  });
 };
 
 module.exports = addCategory;
