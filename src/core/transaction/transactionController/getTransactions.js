@@ -3,9 +3,13 @@ const { createError } = require('../../../helpers');
 const transactionService = require('../transactionService');
 
 const getTransactions = async (req, res) => {
-  const { type } = req.params;
+  const { type, date } = req.query;
 
-  const transactions = await transactionService.findTransactions({ type });
+  const transactions = await transactionService.findTransactions({
+    type,
+    date,
+  });
+
   if (transactions.length === 0) {
     throw createError(404);
   }
