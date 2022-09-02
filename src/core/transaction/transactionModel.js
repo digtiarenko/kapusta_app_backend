@@ -75,9 +75,15 @@ const deleteTransactionSchema = Joi.object({
     .required(),
 });
 
+const getTransactionsSchema = Joi.object({
+  type: Joi.string().valid('expenses', 'income').required(),
+  date: Joi.string().pattern(dateRegexp).required(),
+});
+
 const joiSchemas = {
   add: addTransactionSchema,
   delete: deleteTransactionSchema,
+  get: getTransactionsSchema,
 };
 const Transaction = model('transaction', transactionSchema);
 
