@@ -13,9 +13,9 @@ router.post(
 );
 
 router.get(
-  '/',
+  '/:type/:date',
   auth,
-  validation(joiSchemas.get, 'query'),
+  validation(joiSchemas.get, 'params'),
   ctrlWrapper(ctrlTransaction.getTransactions),
 );
 
