@@ -1,18 +1,18 @@
-const { createError } = require('../../../helpers');
-
 const transactionService = require('../transactionService');
 
 const getTransactions = async (req, res) => {
-  const { type, date } = req.query;
+  const { type, date } = req.params;
+  const { page = 1, limit = 9 } = req.query;
+  const { id } = req.user;
+  const skip = (page - 1) * limit;
 
   const transactions = await transactionService.findTransactions({
+    id,
     type,
     date,
+    skip,
+    limit,
   });
-
-  if (transactions.length === 0) {
-    throw createError(404);
-  }
 
   res.status(200).json({
     transactions,

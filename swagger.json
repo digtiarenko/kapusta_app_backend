@@ -390,7 +390,7 @@
         }
       }
     },
-    "/transactions/{type}": {
+    "/transactions/{type}/{date}": {
       "get": {
         "tags": ["Transaction"],
         "summary": "Get user transactions",
@@ -398,10 +398,35 @@
           {
             "name": "type",
             "in": "path",
-            "description": "Transaction type ",
+            "description": "Transaction type(should be 'expenses' or 'income') ",
             "required": true,
             "type": "string",
+            "enum": ["expenses", "income"],
             "example": "income"
+          },
+          {
+            "name": "date",
+            "in": "path",
+            "description": "Transaction date ",
+            "required": true,
+            "type": "string",
+            "example": "2022-9-2"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Transaction pagination ",
+            "required": false,
+            "type": "string",
+            "example": "1"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Transaction pagination ",
+            "required": false,
+            "type": "string",
+            "example": "9"
           }
         ],
         "security": [{ "Bearer": [] }],
@@ -433,16 +458,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotFoundTransactionResponse"
                 }
               }
             }
@@ -501,7 +516,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/NotFoundTransactionResponse"
+                  "$ref": "#/components/schemas/NotFoundResponse"
                 }
               }
             }
@@ -719,7 +734,7 @@
             }
           },
           "409": {
-            "description": "Has already added",
+            "description": "Category list is full or user has this category",
             "content": {
               "application/json": {
                 "schema": {
@@ -729,12 +744,23 @@
             }
           }
         }
-      },
+      }
+    },
 
+    "/categories/{categoryId}": {
       "delete": {
         "tags": ["Category"],
         "summary": "Delete category from user category list",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "path",
+            "description": "Category id ",
+            "required": true,
+            "type": "string",
+            "example": "630f7f382a67312b287559a0"
+          }
+        ],
         "security": [{ "Bearer": [] }],
 
         "responses": {
@@ -774,6 +800,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/NoPermissionCategoryResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
                 }
               }
             }
@@ -1218,6 +1254,16 @@
           "user": { "$ref": "#/components/schemas/UserInfo" }
         }
       },
+      "ConflictCategoryResponse": {
+        "type": "object",
+        "description": "User category",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "error message"
+          }
+        }
+      },
 
       "DeleteCategoryResponse": {
         "type": "object",
@@ -1232,7 +1278,7 @@
         }
       },
 
-      "NotFoundTransactionResponse": {
+      "NotFoundResponse": {
         "type": "object",
         "properties": {
           "message": {
