@@ -561,17 +561,23 @@
       }
     },
 
-    "/reports/monthly-expense": {
+    "/reports/monthly-expenses": {
       "get": {
         "tags": ["Report"],
-        "summary": "Get expense reports by month (Route in development)",
+        "summary": "Get expenses reports by month",
         "parameters": [],
         "security": [{ "Bearer": [] }],
 
         "responses": {
           "200": {
             "description": "Successful operation",
-            "content": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportExpensesListObject"
+                }
+              }
+            }
           },
           "400": {
             "description": "No token provided",
@@ -600,14 +606,20 @@
     "/reports/monthly-income": {
       "get": {
         "tags": ["Report"],
-        "summary": "Get income reports by month (Route in development)",
+        "summary": "Get income reports by month",
         "parameters": [],
         "security": [{ "Bearer": [] }],
 
         "responses": {
           "200": {
             "description": "Successful operation",
-            "content": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportIncomeListObject"
+                }
+              }
+            }
           },
           "400": {
             "description": "No token provided",
@@ -1167,7 +1179,102 @@
           "user": { "$ref": "#/components/schemas/TransactionInfo" }
         }
       },
-
+      "ReportExpensesByMonth": {
+        "type": "object",
+        "description": "User expenses by month",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Report ID",
+            "example": "5"
+          },
+          "date": {
+            "type": "string",
+            "description": "Report period",
+            "example": "2022-5"
+          },
+          "type": {
+            "type": "string",
+            "description": "Report type",
+            "example": "expenses"
+          },
+          "totalSum": {
+            "type": "string",
+            "description": "Total sum by month",
+            "example": "expenses"
+          }
+        },
+        "example": {
+          "_id": "5",
+          "date": "2022-5",
+          "type": "expenses",
+          "totalSum": 1234
+        }
+      },
+      "ReportExpensesList": {
+        "type": "array",
+        "description": "User report by month list",
+        "items": {
+          "$ref": "#/components/schemas/ReportExpensesByMonth"
+        }
+      },
+      "ReportExpensesListObject": {
+        "type": "object",
+        "description": "User report by month",
+        "properties": {
+          "expensesByMonth": {
+            "$ref": "#/components/schemas/ReportExpensesList"
+          }
+        }
+      },
+      "ReportIncomeByMonth": {
+        "type": "object",
+        "description": "User income by month",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Report ID",
+            "example": "5"
+          },
+          "date": {
+            "type": "string",
+            "description": "Report period",
+            "example": "2022-5"
+          },
+          "type": {
+            "type": "string",
+            "description": "Report type",
+            "example": "income"
+          },
+          "totalSum": {
+            "type": "string",
+            "description": "Total sum by month",
+            "example": "income"
+          }
+        },
+        "example": {
+          "_id": "5",
+          "date": "2022-5",
+          "type": "income",
+          "totalSum": 1234
+        }
+      },
+      "ReportIncomeList": {
+        "type": "array",
+        "description": "User report by month list",
+        "items": {
+          "$ref": "#/components/schemas/ReportIncomeByMonth"
+        }
+      },
+      "ReportIncomeListObject": {
+        "type": "object",
+        "description": "User report by month",
+        "properties": {
+          "incomeByMonth": {
+            "$ref": "#/components/schemas/ReportIncomeList"
+          }
+        }
+      },
       "CategoryInfo": {
         "type": "object",
         "description": "User category",
