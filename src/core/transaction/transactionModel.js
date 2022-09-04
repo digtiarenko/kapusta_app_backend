@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 const Joi = require('joi');
 
 const { Schema, model } = mongoose;
@@ -90,4 +91,5 @@ const Transaction = model('transaction', transactionSchema);
 module.exports = {
   Transaction,
   joiSchemas,
+  ObjectId,
 };

@@ -12,7 +12,7 @@ router.get(
   ctrlWrapper(ctrlReport.getIncomeReportByMonth),
 );
 router.get(
-  '/monthly-expense',
+  '/monthly-expenses',
   auth,
   ctrlWrapper(ctrlReport.getExpenseReportByMonth),
 );
