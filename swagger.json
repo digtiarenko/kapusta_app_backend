@@ -402,7 +402,7 @@
             "required": true,
             "type": "string",
             "enum": ["expenses", "income"],
-            "example": "income"
+            "example": "expenses"
           },
           {
             "name": "date",
@@ -410,7 +410,7 @@
             "description": "Transaction date ",
             "required": true,
             "type": "string",
-            "example": "2022-9-2"
+            "example": "2022-08-30"
           },
           {
             "name": "page",
@@ -1167,7 +1167,7 @@
           "date": {
             "type": "string",
             "description": "Transaction date",
-            "example": "2022-8-31"
+            "example": "2022-08-30"
           },
           "description": {
             "type": "string",
@@ -1191,7 +1191,7 @@
           }
         },
         "example": {
-          "date": "2022-8-31",
+          "date": "2022-08-30",
           "description": "Beef",
           "category": "630d23089692d4e9360ec34d",
           "value": 300,

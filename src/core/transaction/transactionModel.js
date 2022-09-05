@@ -94,7 +94,7 @@ const deleteTransactionSchema = Joi.object({
     .required(),
 });
 
-const getTransactionsSchema = Joi.object({
+const getParamsTransactionsSchema = Joi.object({
   type: Joi.string().valid('expenses', 'income').required(),
   date: Joi.string()
     .pattern(dateRegexp)
@@ -117,10 +117,22 @@ const getTransactionsSchema = Joi.object({
     }),
 });
 
+const getQueryTransactionsSchema = Joi.object({
+  page: Joi.number().min(1).max(1000),
+  limit: Joi.number().min(1).max(100),
+});
+
+const getQueryReportSchema = Joi.object({
+  year: Joi.number().min(1500).max(2500),
+  month: Joi.number().min(1).max(12),
+});
+
 const joiSchemas = {
   add: addTransactionSchema,
   delete: deleteTransactionSchema,
-  get: getTransactionsSchema,
+  getParam: getParamsTransactionsSchema,
+  getQuery: getQueryTransactionsSchema,
+  getReport: getQueryReportSchema,
 };
 const Transaction = model('transaction', transactionSchema);
 
