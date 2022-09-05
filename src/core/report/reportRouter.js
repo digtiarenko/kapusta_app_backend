@@ -5,7 +5,7 @@ const { auth } = require('../../middleware');
 
 const router = express.Router();
 
-router.get('/', ctrlWrapper(ctrlReport.getFullReportByMonth));
+router.get('/', auth, ctrlWrapper(ctrlReport.getFullReportByMonth));
 router.get(
   '/monthly-income',
   auth,

@@ -528,14 +528,37 @@
     "/reports": {
       "get": {
         "tags": ["Report"],
-        "summary": "Get full report (Route in development)",
-        "parameters": [],
+        "summary": "Get full report",
+        "parameters": [
+          {
+            "name": "year",
+            "in": "query",
+            "description": "Transaction date ",
+            "required": false,
+            "type": "string",
+            "example": "2022"
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "description": "Transaction date ",
+            "required": false,
+            "type": "string",
+            "example": "09"
+          }
+        ],
         "security": [{ "Bearer": [] }],
 
         "responses": {
           "200": {
             "description": "Successful operation",
-            "content": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportDateList"
+                }
+              }
+            }
           },
           "400": {
             "description": "No token provided",
@@ -1042,8 +1065,30 @@
             "example": "Beef"
           },
           "category": {
-            "type": "string",
-            "description": "Transaction category ID",
+            "type": "object",
+            "description": "Transaction category",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "description": "Category ID",
+                "example": "630d23089692d4e9360ec34d"
+              },
+              "name": {
+                "type": "string",
+                "description": "Category name",
+                "example": "Products"
+              },
+              "default": {
+                "type": "bool",
+                "description": "Category default",
+                "example": "true"
+              },
+              "example": {
+                "_id": "630d23089692d4e9360ec34d",
+                "name": "Products",
+                "default": true
+              }
+            },
             "example": "630d23089692d4e9360ec34d"
           },
           "value": {
@@ -1073,15 +1118,22 @@
           }
         },
         "example": {
-          "date": "2022-8-31",
-          "description": "Beef",
-          "category": "630d23089692d4e9360ec34d",
-          "value": 300,
-          "type": "expenses",
-          "owner": "630f65c14db7d9227ae8a8c3",
-          "_id": "630f7f382a67312b287559a0",
-          "createdAt": "2022-08-31T15:33:12.572Z",
-          "updatedAt": "2022-08-31T15:33:12.572Z"
+          "message": "Transaction created successfully",
+          "transaction": {
+            "date": "2022-09-05",
+            "description": "carrot",
+            "category": {
+              "_id": "630d23089692d4e9360ec34d",
+              "name": "Products",
+              "default": true
+            },
+            "value": 270,
+            "type": "expenses",
+            "owner": "631337123b500f537b0dd158",
+            "_id": "63161ceb71a791af987ec1c0",
+            "createdAt": "2022-09-05T15:59:39.868Z",
+            "updatedAt": "2022-09-05T15:59:39.868Z"
+          }
         }
       },
 
@@ -1155,7 +1207,7 @@
             "description": "message",
             "example": "Transaction created successfully"
           },
-          "user": { "$ref": "#/components/schemas/TransactionInfo" }
+          "transaction": { "$ref": "#/components/schemas/TransactionInfo" }
         }
       },
 
@@ -1275,6 +1327,104 @@
           }
         }
       },
+      "ReportTransactionList": {
+        "type": "array",
+        "description": "Report transaction list",
+        "items": {
+          "type": "object",
+          "description": "Transaction list",
+          "properties": {
+            "description": {
+              "type": "string",
+              "example": "milk"
+            },
+            "value": {
+              "type": "number",
+              "example": 120
+            }
+          }
+        }
+      },
+      "ReportCategoryList": {
+        "type": "array",
+        "description": "Report category cist",
+        "items": {
+          "type": "object",
+          "description": "Transaction category list",
+          "properties": {
+            "category": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "description": "Category ID",
+                  "example": "630d23089692d4e9360ec34d"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Category name",
+                  "example": "Products"
+                },
+                "type": {
+                  "type": "string",
+                  "description": "Category type",
+                  "example": "expenses"
+                }
+              }
+            },
+            "totalSum": {
+              "type": "number",
+              "example": 820
+            },
+            "arrOfTransactions": {
+              "$ref": "#/components/schemas/ReportTransactionList"
+            }
+          }
+        }
+      },
+
+      "ReportTypeList": {
+        "type": "array",
+        "description": "Report type list",
+        "items": {
+          "type": "object",
+          "description": "Transaction type List",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "expenses"
+            },
+            "arrOfCategories": {
+              "$ref": "#/components/schemas/ReportCategoryList"
+            }
+          }
+        }
+      },
+      "ReportDateList": {
+        "type": "array",
+        "description": "Report date list",
+        "items": {
+          "type": "object",
+          "description": "Transaction date list",
+          "properties": {
+            "date": {
+              "type": "string",
+              "example": "2022-09-05"
+            },
+            "arrOfCategories": {
+              "$ref": "#/components/schemas/ReportTypeList"
+            }
+          }
+        }
+      },
+      "ReportFullInfoObject": {
+        "type": "object",
+        "description": "User full report",
+        "properties": {
+          "fullReportByMonth": { "$ref": "#/components/schemas/ReportDateList" }
+        }
+      },
+
       "CategoryInfo": {
         "type": "object",
         "description": "User category",

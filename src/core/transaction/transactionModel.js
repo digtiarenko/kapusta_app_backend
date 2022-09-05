@@ -5,7 +5,7 @@ const Joi = require('joi');
 const { Schema, model } = mongoose;
 
 const dateRegexp =
-  /^((19|2\d)\d\d)-((0?[1-9])|(1[0-2]))-((0?[1-9])|([12]\d)|(3[01]))$/;
+  /^(([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-(((0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8]))))|((([0-9]{2})(0[48]|[2468][048]|[13579][26])|((0[48]|[2468][048]|[3579][26])00))-02-29)$/;
 
 const transactionSchema = new Schema(
   {
@@ -18,7 +18,7 @@ const transactionSchema = new Schema(
       required: true,
     },
     category: {
-      type: String,
+      type: Schema.Types.ObjectId,
       required: true,
       ref: 'category',
     },
@@ -45,7 +45,25 @@ const transactionSchema = new Schema(
 );
 
 const addTransactionSchema = Joi.object({
-  date: Joi.string().pattern(dateRegexp).required(),
+  date: Joi.string()
+    .pattern(dateRegexp)
+    .required()
+    .error(errors => {
+      errors.forEach(err => {
+        console.log(err.code);
+        switch (err.code) {
+          case 'any.required':
+            err.message = 'Value date should not be empty!';
+            break;
+          case 'string.pattern.base':
+            err.message = `Value date should have be correct!`;
+            break;
+          default:
+            break;
+        }
+      });
+      return errors;
+    }),
   description: Joi.string().min(2).max(100).required(),
   value: Joi.number().required(),
   type: Joi.string().valid('expenses', 'income').required(),
@@ -78,7 +96,25 @@ const deleteTransactionSchema = Joi.object({
 
 const getTransactionsSchema = Joi.object({
   type: Joi.string().valid('expenses', 'income').required(),
-  date: Joi.string().pattern(dateRegexp).required(),
+  date: Joi.string()
+    .pattern(dateRegexp)
+    .required()
+    .error(errors => {
+      errors.forEach(err => {
+        console.log(err.code);
+        switch (err.code) {
+          case 'any.required':
+            err.message = 'Value date should not be empty!';
+            break;
+          case 'string.pattern.base':
+            err.message = `Value date should have be correct!`;
+            break;
+          default:
+            break;
+        }
+      });
+      return errors;
+    }),
 });
 
 const joiSchemas = {
