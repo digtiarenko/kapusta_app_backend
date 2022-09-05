@@ -1,7 +1,9 @@
 const { Transaction } = require('../transactionModel');
 
-const createTransaction = transactionData => {
-  const result = Transaction.create(transactionData);
+const createTransaction = async transactionData => {
+  const result = await (
+    await Transaction.create(transactionData)
+  ).populate('category', 'name default');
   return result;
 };
 
