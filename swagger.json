@@ -402,7 +402,7 @@
             "required": true,
             "type": "string",
             "enum": ["expenses", "income"],
-            "example": "income"
+            "example": "expenses"
           },
           {
             "name": "date",
@@ -410,7 +410,7 @@
             "description": "Transaction date ",
             "required": true,
             "type": "string",
-            "example": "2022-9-2"
+            "example": "2022-08-30"
           },
           {
             "name": "page",
@@ -528,14 +528,37 @@
     "/reports": {
       "get": {
         "tags": ["Report"],
-        "summary": "Get full report (Route in development)",
-        "parameters": [],
+        "summary": "Get full report",
+        "parameters": [
+          {
+            "name": "year",
+            "in": "query",
+            "description": "Transaction date ",
+            "required": false,
+            "type": "string",
+            "example": "2022"
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "description": "Transaction date ",
+            "required": false,
+            "type": "string",
+            "example": "09"
+          }
+        ],
         "security": [{ "Bearer": [] }],
 
         "responses": {
           "200": {
             "description": "Successful operation",
-            "content": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportDateList"
+                }
+              }
+            }
           },
           "400": {
             "description": "No token provided",
@@ -561,17 +584,23 @@
       }
     },
 
-    "/reports/monthly-expense": {
+    "/reports/monthly-expenses": {
       "get": {
         "tags": ["Report"],
-        "summary": "Get expense reports by month (Route in development)",
+        "summary": "Get expenses reports by month",
         "parameters": [],
         "security": [{ "Bearer": [] }],
 
         "responses": {
           "200": {
             "description": "Successful operation",
-            "content": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportExpensesListObject"
+                }
+              }
+            }
           },
           "400": {
             "description": "No token provided",
@@ -600,14 +629,20 @@
     "/reports/monthly-income": {
       "get": {
         "tags": ["Report"],
-        "summary": "Get income reports by month (Route in development)",
+        "summary": "Get income reports by month",
         "parameters": [],
         "security": [{ "Bearer": [] }],
 
         "responses": {
           "200": {
             "description": "Successful operation",
-            "content": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportIncomeListObject"
+                }
+              }
+            }
           },
           "400": {
             "description": "No token provided",
@@ -1030,8 +1065,30 @@
             "example": "Beef"
           },
           "category": {
-            "type": "string",
-            "description": "Transaction category ID",
+            "type": "object",
+            "description": "Transaction category",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "description": "Category ID",
+                "example": "630d23089692d4e9360ec34d"
+              },
+              "name": {
+                "type": "string",
+                "description": "Category name",
+                "example": "Products"
+              },
+              "default": {
+                "type": "bool",
+                "description": "Category default",
+                "example": "true"
+              },
+              "example": {
+                "_id": "630d23089692d4e9360ec34d",
+                "name": "Products",
+                "default": true
+              }
+            },
             "example": "630d23089692d4e9360ec34d"
           },
           "value": {
@@ -1061,15 +1118,22 @@
           }
         },
         "example": {
-          "date": "2022-8-31",
-          "description": "Beef",
-          "category": "630d23089692d4e9360ec34d",
-          "value": 300,
-          "type": "expenses",
-          "owner": "630f65c14db7d9227ae8a8c3",
-          "_id": "630f7f382a67312b287559a0",
-          "createdAt": "2022-08-31T15:33:12.572Z",
-          "updatedAt": "2022-08-31T15:33:12.572Z"
+          "message": "Transaction created successfully",
+          "transaction": {
+            "date": "2022-09-05",
+            "description": "carrot",
+            "category": {
+              "_id": "630d23089692d4e9360ec34d",
+              "name": "Products",
+              "default": true
+            },
+            "value": 270,
+            "type": "expenses",
+            "owner": "631337123b500f537b0dd158",
+            "_id": "63161ceb71a791af987ec1c0",
+            "createdAt": "2022-09-05T15:59:39.868Z",
+            "updatedAt": "2022-09-05T15:59:39.868Z"
+          }
         }
       },
 
@@ -1103,7 +1167,7 @@
           "date": {
             "type": "string",
             "description": "Transaction date",
-            "example": "2022-8-31"
+            "example": "2022-08-30"
           },
           "description": {
             "type": "string",
@@ -1127,7 +1191,7 @@
           }
         },
         "example": {
-          "date": "2022-8-31",
+          "date": "2022-08-30",
           "description": "Beef",
           "category": "630d23089692d4e9360ec34d",
           "value": 300,
@@ -1143,7 +1207,7 @@
             "description": "message",
             "example": "Transaction created successfully"
           },
-          "user": { "$ref": "#/components/schemas/TransactionInfo" }
+          "transaction": { "$ref": "#/components/schemas/TransactionInfo" }
         }
       },
 
@@ -1165,6 +1229,199 @@
             "example": "Transaction deleted successfully"
           },
           "user": { "$ref": "#/components/schemas/TransactionInfo" }
+        }
+      },
+      "ReportExpensesByMonth": {
+        "type": "object",
+        "description": "User expenses by month",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Report ID",
+            "example": "5"
+          },
+          "date": {
+            "type": "string",
+            "description": "Report period",
+            "example": "2022-5"
+          },
+          "type": {
+            "type": "string",
+            "description": "Report type",
+            "example": "expenses"
+          },
+          "totalSum": {
+            "type": "string",
+            "description": "Total sum by month",
+            "example": "expenses"
+          }
+        },
+        "example": {
+          "_id": "5",
+          "date": "2022-5",
+          "type": "expenses",
+          "totalSum": 1234
+        }
+      },
+      "ReportExpensesList": {
+        "type": "array",
+        "description": "User report by month list",
+        "items": {
+          "$ref": "#/components/schemas/ReportExpensesByMonth"
+        }
+      },
+      "ReportExpensesListObject": {
+        "type": "object",
+        "description": "User report by month",
+        "properties": {
+          "expensesByMonth": {
+            "$ref": "#/components/schemas/ReportExpensesList"
+          }
+        }
+      },
+      "ReportIncomeByMonth": {
+        "type": "object",
+        "description": "User income by month",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Report ID",
+            "example": "5"
+          },
+          "date": {
+            "type": "string",
+            "description": "Report period",
+            "example": "2022-5"
+          },
+          "type": {
+            "type": "string",
+            "description": "Report type",
+            "example": "income"
+          },
+          "totalSum": {
+            "type": "string",
+            "description": "Total sum by month",
+            "example": "income"
+          }
+        },
+        "example": {
+          "_id": "5",
+          "date": "2022-5",
+          "type": "income",
+          "totalSum": 1234
+        }
+      },
+      "ReportIncomeList": {
+        "type": "array",
+        "description": "User report by month list",
+        "items": {
+          "$ref": "#/components/schemas/ReportIncomeByMonth"
+        }
+      },
+      "ReportIncomeListObject": {
+        "type": "object",
+        "description": "User report by month",
+        "properties": {
+          "incomeByMonth": {
+            "$ref": "#/components/schemas/ReportIncomeList"
+          }
+        }
+      },
+      "ReportTransactionList": {
+        "type": "array",
+        "description": "Report transaction list",
+        "items": {
+          "type": "object",
+          "description": "Transaction list",
+          "properties": {
+            "description": {
+              "type": "string",
+              "example": "milk"
+            },
+            "value": {
+              "type": "number",
+              "example": 120
+            }
+          }
+        }
+      },
+      "ReportCategoryList": {
+        "type": "array",
+        "description": "Report category cist",
+        "items": {
+          "type": "object",
+          "description": "Transaction category list",
+          "properties": {
+            "category": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "description": "Category ID",
+                  "example": "630d23089692d4e9360ec34d"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Category name",
+                  "example": "Products"
+                },
+                "type": {
+                  "type": "string",
+                  "description": "Category type",
+                  "example": "expenses"
+                }
+              }
+            },
+            "totalSum": {
+              "type": "number",
+              "example": 820
+            },
+            "arrOfTransactions": {
+              "$ref": "#/components/schemas/ReportTransactionList"
+            }
+          }
+        }
+      },
+
+      "ReportTypeList": {
+        "type": "array",
+        "description": "Report type list",
+        "items": {
+          "type": "object",
+          "description": "Transaction type List",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "expenses"
+            },
+            "arrOfCategories": {
+              "$ref": "#/components/schemas/ReportCategoryList"
+            }
+          }
+        }
+      },
+      "ReportDateList": {
+        "type": "array",
+        "description": "Report date list",
+        "items": {
+          "type": "object",
+          "description": "Transaction date list",
+          "properties": {
+            "date": {
+              "type": "string",
+              "example": "2022-09-05"
+            },
+            "arrOfCategories": {
+              "$ref": "#/components/schemas/ReportTypeList"
+            }
+          }
+        }
+      },
+      "ReportFullInfoObject": {
+        "type": "object",
+        "description": "User full report",
+        "properties": {
+          "fullReportByMonth": { "$ref": "#/components/schemas/ReportDateList" }
         }
       },
 
