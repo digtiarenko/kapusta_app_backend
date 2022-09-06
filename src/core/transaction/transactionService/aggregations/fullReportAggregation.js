@@ -1,4 +1,4 @@
-const fullReportAggregation = id => [
+const fullReportAggregation = (id, limit) => [
   {
     $match: {
       owner: id,
@@ -167,5 +167,11 @@ const fullReportAggregation = id => [
       arrOfTypes: '$arrOfTypes',
     },
   },
+  {
+    $sort: {
+      date: -1,
+    },
+  },
+  { $limit: limit },
 ];
 module.exports = fullReportAggregation;

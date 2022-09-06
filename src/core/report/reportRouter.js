@@ -15,11 +15,13 @@ router.get(
 router.get(
   '/monthly-income',
   auth,
+  validation(joiSchemas.getReport, 'query'),
   ctrlWrapper(ctrlReport.getIncomeReportByMonth),
 );
 router.get(
   '/monthly-expenses',
   auth,
+  validation(joiSchemas.getReport, 'query'),
   ctrlWrapper(ctrlReport.getExpenseReportByMonth),
 );
 

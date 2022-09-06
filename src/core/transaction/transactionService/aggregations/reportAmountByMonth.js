@@ -1,4 +1,4 @@
-const reportAmountByMonth = (id, type) => [
+const reportAmountByMonth = (id, type, limit) => [
   {
     $match: {
       owner: id,
@@ -45,7 +45,7 @@ const reportAmountByMonth = (id, type) => [
       date: -1,
     },
   },
-  { $limit: 6 },
+  { $limit: limit },
 ];
 
 module.exports = reportAmountByMonth;

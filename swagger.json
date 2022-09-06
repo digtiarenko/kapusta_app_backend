@@ -423,7 +423,7 @@
           {
             "name": "limit",
             "in": "query",
-            "description": "Transaction pagination ",
+            "description": "Quantity results of report ",
             "required": false,
             "type": "string",
             "example": "9"
@@ -533,7 +533,7 @@
           {
             "name": "year",
             "in": "query",
-            "description": "Transaction date ",
+            "description": "Report date ",
             "required": false,
             "type": "string",
             "example": "2022"
@@ -541,10 +541,18 @@
           {
             "name": "month",
             "in": "query",
-            "description": "Transaction date ",
+            "description": "Report date ",
             "required": false,
             "type": "string",
             "example": "09"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Quantity results of report ",
+            "required": false,
+            "type": "string",
+            "example": "6"
           }
         ],
         "security": [{ "Bearer": [] }],
@@ -588,7 +596,32 @@
       "get": {
         "tags": ["Report"],
         "summary": "Get expenses reports by month",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "year",
+            "in": "query",
+            "description": "Report date ",
+            "required": false,
+            "type": "string",
+            "example": "2022"
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "description": "Report date ",
+            "required": false,
+            "type": "string",
+            "example": "09"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Quantity results of report ",
+            "required": false,
+            "type": "string",
+            "example": "6"
+          }
+        ],
         "security": [{ "Bearer": [] }],
 
         "responses": {
@@ -630,7 +663,32 @@
       "get": {
         "tags": ["Report"],
         "summary": "Get income reports by month",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "year",
+            "in": "query",
+            "description": "Report date ",
+            "required": false,
+            "type": "string",
+            "example": "2022"
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "description": "Report date ",
+            "required": false,
+            "type": "string",
+            "example": "09"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Quantity results of report(from 1 to 1000) ",
+            "required": false,
+            "type": "string",
+            "example": "6"
+          }
+        ],
         "security": [{ "Bearer": [] }],
 
         "responses": {
