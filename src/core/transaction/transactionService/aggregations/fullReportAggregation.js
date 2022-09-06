@@ -1,4 +1,4 @@
-const fullReportAggregation = id => [
+const fullReportAggregation = (id, limit) => [
   {
     $match: {
       owner: id,
@@ -35,12 +35,7 @@ const fullReportAggregation = id => [
         value: '$value',
       },
       arrOfValues: {
-        $push: {
-          description: {
-            $toLower: '$description',
-          },
-          value: '$value',
-        },
+        $push: '$value',
       },
     },
   },
@@ -58,13 +53,8 @@ const fullReportAggregation = id => [
       category: '$_id.category',
       description: '$_id.description',
       value: {
-        $sum: '$arrOfValues.value',
+        $sum: '$arrOfValues',
       },
-    },
-  },
-  {
-    $sort: {
-      value: -1,
     },
   },
   {
@@ -76,7 +66,34 @@ const fullReportAggregation = id => [
         description: {
           $toLower: '$description',
         },
-        value: '$value',
+      },
+      arrOfDescription: {
+        $push: {
+          description: {
+            $toLower: '$description',
+          },
+          value: '$value',
+        },
+      },
+    },
+  },
+  {
+    $project: {
+      date: '$_id.date',
+      type: '$_id.type',
+      category: '$_id.category',
+      description: '$_id.description',
+      value: {
+        $sum: '$arrOfDescription.value',
+      },
+    },
+  },
+  {
+    $group: {
+      _id: {
+        date: '$date',
+        type: '$type',
+        category: '$category',
       },
       arrOfTransactions: {
         $push: {
@@ -93,7 +110,6 @@ const fullReportAggregation = id => [
       date: '$_id.date',
       type: '$_id.type',
       category: '$_id.category',
-      description: '$_id.description',
       arrOfTransactions: '$arrOfTransactions',
     },
   },
@@ -111,21 +127,6 @@ const fullReportAggregation = id => [
     },
   },
   {
-    $project: {
-      date: '$date',
-      type: '$_id.type',
-      category: {
-        name: '$category.name',
-        _id: '$category._id',
-        type: '$category.type',
-      },
-      totalSum: {
-        $sum: '$arrOfTransactions.value',
-      },
-      arrOfTransactions: '$arrOfTransactions',
-    },
-  },
-  {
     $group: {
       _id: {
         date: '$date',
@@ -133,8 +134,14 @@ const fullReportAggregation = id => [
       },
       arrOfCategories: {
         $push: {
-          category: '$category',
-          totalSum: '$totalSum',
+          category: {
+            _id: '$category._id',
+            name: '$category.name',
+            type: '$category.type',
+          },
+          totalSum: {
+            $sum: '$arrOfTransactions.value',
+          },
           arrOfTransactions: '$arrOfTransactions',
         },
       },
@@ -155,6 +162,9 @@ const fullReportAggregation = id => [
       arrOfTypes: {
         $push: {
           type: '$type',
+          totalSum: {
+            $sum: '$arrOfCategories.totalSum',
+          },
           arrOfCategories: '$arrOfCategories',
         },
       },
@@ -167,5 +177,20 @@ const fullReportAggregation = id => [
       arrOfTypes: '$arrOfTypes',
     },
   },
+  {
+    $sort: {
+      date: -1,
+    },
+  },
+  { $limit: limit },
 ];
 module.exports = fullReportAggregation;
+
+// date: {
+//         $toString: {
+//           $dateFromParts: {
+//             year: '$_id.year',
+//             month: '$_id.month',
+//           },
+//         },
+//       },

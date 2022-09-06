@@ -119,12 +119,13 @@ const getParamsTransactionsSchema = Joi.object({
 
 const getQueryTransactionsSchema = Joi.object({
   page: Joi.number().min(1).max(1000),
-  limit: Joi.number().min(1).max(100),
+  limit: Joi.number().min(1).max(1000),
 });
 
 const getQueryReportSchema = Joi.object({
   year: Joi.number().min(1500).max(2500),
   month: Joi.number().min(1).max(12),
+  limit: Joi.number().min(1).max(120),
 });
 
 const joiSchemas = {
