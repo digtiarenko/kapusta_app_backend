@@ -11,7 +11,6 @@ const getFullReportByMonth = async (_id, year, month, limit) => {
     aggregations.fullReportAggregation(_id, Number(limit)),
   );
 
-  console.log(result);
   const trimDateResult = result.map(item => {
     const indexEndDate = item.date.indexOf('T');
     const trimDate = item.date.substr(0, indexEndDate);
