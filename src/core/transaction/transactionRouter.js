@@ -13,7 +13,7 @@ router.post(
 );
 
 router.get(
-  '/:type/:date',
+  '/:date',
   auth,
   validation(joiSchemas.getParam, 'params'),
   validation(joiSchemas.getQuery, 'query'),

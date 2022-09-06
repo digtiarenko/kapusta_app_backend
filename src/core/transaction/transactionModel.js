@@ -95,7 +95,6 @@ const deleteTransactionSchema = Joi.object({
 });
 
 const getParamsTransactionsSchema = Joi.object({
-  type: Joi.string().valid('expenses', 'income').required(),
   date: Joi.string()
     .pattern(dateRegexp)
     .required()
@@ -118,6 +117,7 @@ const getParamsTransactionsSchema = Joi.object({
 });
 
 const getQueryTransactionsSchema = Joi.object({
+  type: Joi.string().valid('expenses', 'income'),
   page: Joi.number().min(1).max(1000),
   limit: Joi.number().min(1).max(1000),
 });
