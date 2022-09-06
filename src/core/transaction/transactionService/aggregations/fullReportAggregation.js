@@ -111,30 +111,22 @@ const fullReportAggregation = (id, limit) => [
     },
   },
   {
-    $project: {
-      date: '$date',
-      type: '$_id.type',
-      category: {
-        name: '$category.name',
-        _id: '$category._id',
-        type: '$category.type',
-      },
-      totalSum: {
-        $sum: '$arrOfTransactions.value',
-      },
-      arrOfTransactions: '$arrOfTransactions',
-    },
-  },
-  {
     $group: {
       _id: {
         date: '$date',
         type: '$type',
+        category: '$category.name',
       },
       arrOfCategories: {
         $push: {
-          category: '$category',
-          totalSum: '$totalSum',
+          category: {
+            _id: '$category._id',
+            name: '$category.name',
+            type: '$category.type',
+          },
+          totalSum: {
+            $sum: '$arrOfTransactions.value',
+          },
           arrOfTransactions: '$arrOfTransactions',
         },
       },
@@ -151,6 +143,7 @@ const fullReportAggregation = (id, limit) => [
     $group: {
       _id: {
         date: '$date',
+        type: '$type',
       },
       arrOfTypes: {
         $push: {
