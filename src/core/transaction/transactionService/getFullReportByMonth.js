@@ -1,22 +1,14 @@
 const { Transaction } = require('../transactionModel');
 const aggregations = require('./aggregations');
+const { transformDate } = require('../../../helpers');
 
-const getFullReportByMonth = async (_id, year, month) => {
-  let date = new Date();
-  const currentYear = date.getFullYear();
-  const currentMonth = date.getMonth() + 1;
-  if (year && month) {
-    date = year + '-' + month + '-' + '01';
-  } else if (year && !month) {
-    date = year + '-' + currentMonth + '-' + '01';
-  } else if (!year && month) {
-    date = currentYear + '-' + month + '-' + '01';
-  } else {
-    date = null;
-  }
+const getFullReportByMonth = async (_id, year, month, limit) => {
+  const date = transformDate(year, month);
+
+  if (!limit) limit = 1000;
 
   const result = await Transaction.aggregate(
-    aggregations.fullReportAggregation(_id),
+    aggregations.fullReportAggregation(_id, Number(limit)),
   );
 
   const trimDateResult = result.map(item => {

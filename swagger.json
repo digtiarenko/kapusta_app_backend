@@ -390,20 +390,11 @@
         }
       }
     },
-    "/transactions/{type}/{date}": {
+    "/transactions/{date}": {
       "get": {
         "tags": ["Transaction"],
         "summary": "Get user transactions",
         "parameters": [
-          {
-            "name": "type",
-            "in": "path",
-            "description": "Transaction type(should be 'expenses' or 'income') ",
-            "required": true,
-            "type": "string",
-            "enum": ["expenses", "income"],
-            "example": "expenses"
-          },
           {
             "name": "date",
             "in": "path",
@@ -411,6 +402,15 @@
             "required": true,
             "type": "string",
             "example": "2022-08-30"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Transaction type(should be 'expenses' or 'income') ",
+            "required": false,
+            "type": "string",
+            "enum": ["expenses", "income"],
+            "example": "expenses"
           },
           {
             "name": "page",
@@ -423,7 +423,7 @@
           {
             "name": "limit",
             "in": "query",
-            "description": "Transaction pagination ",
+            "description": "Quantity results of report ",
             "required": false,
             "type": "string",
             "example": "9"
@@ -533,7 +533,7 @@
           {
             "name": "year",
             "in": "query",
-            "description": "Transaction date ",
+            "description": "Report date ",
             "required": false,
             "type": "string",
             "example": "2022"
@@ -541,10 +541,18 @@
           {
             "name": "month",
             "in": "query",
-            "description": "Transaction date ",
+            "description": "Report date ",
             "required": false,
             "type": "string",
             "example": "09"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Quantity results of report ",
+            "required": false,
+            "type": "string",
+            "example": "6"
           }
         ],
         "security": [{ "Bearer": [] }],
@@ -588,7 +596,32 @@
       "get": {
         "tags": ["Report"],
         "summary": "Get expenses reports by month",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "year",
+            "in": "query",
+            "description": "Report date ",
+            "required": false,
+            "type": "string",
+            "example": "2022"
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "description": "Report date ",
+            "required": false,
+            "type": "string",
+            "example": "09"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Quantity results of report ",
+            "required": false,
+            "type": "string",
+            "example": "6"
+          }
+        ],
         "security": [{ "Bearer": [] }],
 
         "responses": {
@@ -630,7 +663,32 @@
       "get": {
         "tags": ["Report"],
         "summary": "Get income reports by month",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "year",
+            "in": "query",
+            "description": "Report date ",
+            "required": false,
+            "type": "string",
+            "example": "2022"
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "description": "Report date ",
+            "required": false,
+            "type": "string",
+            "example": "09"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Quantity results of report(from 1 to 1000) ",
+            "required": false,
+            "type": "string",
+            "example": "6"
+          }
+        ],
         "security": [{ "Bearer": [] }],
 
         "responses": {
@@ -1374,7 +1432,7 @@
             },
             "totalSum": {
               "type": "number",
-              "example": 820
+              "example": 120
             },
             "arrOfTransactions": {
               "$ref": "#/components/schemas/ReportTransactionList"
@@ -1394,6 +1452,10 @@
               "type": "string",
               "example": "expenses"
             },
+            "totalSum": {
+              "type": "number",
+              "example": 120
+            },
             "arrOfCategories": {
               "$ref": "#/components/schemas/ReportCategoryList"
             }
@@ -1411,7 +1473,11 @@
               "type": "string",
               "example": "2022-09-05"
             },
-            "arrOfCategories": {
+            "totalSum": {
+              "type": "number",
+              "example": 120
+            },
+            "arrOfTypes": {
               "$ref": "#/components/schemas/ReportTypeList"
             }
           }
