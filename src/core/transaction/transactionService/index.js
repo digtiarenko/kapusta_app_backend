@@ -1,13 +1,13 @@
 const deleteTransactionById = require('./deleteTransactionById');
 const createTransaction = require('./createTransaction');
-const findTransactions = require('./findTransactions');
+const getTransactionsByDate = require('./getTransactionsByDate');
 const getReportTransactionByMonth = require('./getReportAmountByMonth');
 const getFullReportByMonth = require('./getFullReportByMonth');
 
 module.exports = {
   deleteTransactionById,
   createTransaction,
-  findTransactions,
+  getTransactionsByDate,
   getReportTransactionByMonth,
   getFullReportByMonth,
 };

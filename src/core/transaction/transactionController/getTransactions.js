@@ -1,15 +1,15 @@
 const transactionService = require('../transactionService');
 
 const getTransactions = async (req, res) => {
-  const { type, date } = req.params;
-  const { page = 1, limit = 9 } = req.query;
+  const { date } = req.params;
+  const { type, page = 1, limit = 9 } = req.query;
   const { id } = req.user;
   const skip = (page - 1) * limit;
 
-  const transactions = await transactionService.findTransactions({
+  const transactions = await transactionService.getTransactionsByDate({
     id,
-    type,
     date,
+    type,
     skip,
     limit,
   });

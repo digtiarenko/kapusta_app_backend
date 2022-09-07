@@ -390,20 +390,11 @@
         }
       }
     },
-    "/transactions/{type}/{date}": {
+    "/transactions/{date}": {
       "get": {
         "tags": ["Transaction"],
         "summary": "Get user transactions",
         "parameters": [
-          {
-            "name": "type",
-            "in": "path",
-            "description": "Transaction type(should be 'expenses' or 'income') ",
-            "required": true,
-            "type": "string",
-            "enum": ["expenses", "income"],
-            "example": "expenses"
-          },
           {
             "name": "date",
             "in": "path",
@@ -411,6 +402,15 @@
             "required": true,
             "type": "string",
             "example": "2022-08-30"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Transaction type(should be 'expenses' or 'income') ",
+            "required": false,
+            "type": "string",
+            "enum": ["expenses", "income"],
+            "example": "expenses"
           },
           {
             "name": "page",
@@ -1432,7 +1432,7 @@
             },
             "totalSum": {
               "type": "number",
-              "example": 820
+              "example": 120
             },
             "arrOfTransactions": {
               "$ref": "#/components/schemas/ReportTransactionList"
@@ -1452,6 +1452,10 @@
               "type": "string",
               "example": "expenses"
             },
+            "totalSum": {
+              "type": "number",
+              "example": 120
+            },
             "arrOfCategories": {
               "$ref": "#/components/schemas/ReportCategoryList"
             }
@@ -1469,7 +1473,11 @@
               "type": "string",
               "example": "2022-09-05"
             },
-            "arrOfCategories": {
+            "totalSum": {
+              "type": "number",
+              "example": 120
+            },
+            "arrOfTypes": {
               "$ref": "#/components/schemas/ReportTypeList"
             }
           }
