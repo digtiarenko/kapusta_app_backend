@@ -89,6 +89,11 @@ const fullReportAggregation = (id, limit) => [
     },
   },
   {
+    $sort: {
+      value: -1,
+    },
+  },
+  {
     $group: {
       _id: {
         date: '$date',
@@ -148,6 +153,11 @@ const fullReportAggregation = (id, limit) => [
     },
   },
   {
+    $sort: {
+      totalSum: -1,
+    },
+  },
+  {
     $project: {
       date: '$_id.date',
       type: '$_id.type',
@@ -171,6 +181,11 @@ const fullReportAggregation = (id, limit) => [
     },
   },
   {
+    $sort: {
+      type: -1,
+    },
+  },
+  {
     $project: {
       _id: 0,
       date: '$_id.date',
@@ -185,12 +200,3 @@ const fullReportAggregation = (id, limit) => [
   { $limit: limit },
 ];
 module.exports = fullReportAggregation;
-
-// date: {
-//         $toString: {
-//           $dateFromParts: {
-//             year: '$_id.year',
-//             month: '$_id.month',
-//           },
-//         },
-//       },
