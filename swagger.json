@@ -1205,7 +1205,7 @@
       },
       "TransactionList": {
         "type": "array",
-        "description": "User categories list",
+        "description": "User transaction list",
         "items": {
           "$ref": "#/components/schemas/TransactionInfo"
         }
@@ -1215,7 +1215,7 @@
         "type": "object",
         "description": "User transactions",
         "properties": {
-          "categoryList": { "$ref": "#/components/schemas/TransactionList" }
+          "transactions": { "$ref": "#/components/schemas/TransactionList" }
         }
       },
 
