@@ -119,6 +119,11 @@ const fullReportAggregation = (id, limit) => [
     },
   },
   {
+    $sort: {
+      category: -1,
+    },
+  },
+  {
     $lookup: {
       from: 'categories',
       localField: 'category',

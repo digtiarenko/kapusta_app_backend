@@ -9,7 +9,7 @@ const findTransactions = param => {
         date,
         type,
       },
-      '-createdAt -updatedAt',
+      '-updatedAt',
       {
         skip,
         limit: Number(limit),
@@ -21,7 +21,7 @@ const findTransactions = param => {
         owner: id,
         date,
       },
-      '-createdAt -updatedAt',
+      '-updatedAt',
       {
         skip,
         limit: Number(limit),
