@@ -115,12 +115,15 @@ const fullReportAggregation = (id, limit) => [
       date: '$_id.date',
       type: '$_id.type',
       category: '$_id.category',
+      totalSum: {
+        $sum: '$arrOfTransactions.value',
+      },
       arrOfTransactions: '$arrOfTransactions',
     },
   },
   {
     $sort: {
-      category: -1,
+      totalSum: -1,
     },
   },
   {
@@ -149,17 +152,10 @@ const fullReportAggregation = (id, limit) => [
             name: '$category.name',
             type: '$category.type',
           },
-          totalSum: {
-            $sum: '$arrOfTransactions.value',
-          },
+          totalSum: '$totalSum',
           arrOfTransactions: '$arrOfTransactions',
         },
       },
-    },
-  },
-  {
-    $sort: {
-      totalSum: -1,
     },
   },
   {
