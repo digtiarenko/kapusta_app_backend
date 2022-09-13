@@ -418,6 +418,7 @@
             "description": "Transaction pagination ",
             "required": false,
             "type": "string",
+            "default": "1",
             "example": "1"
           },
           {
@@ -426,7 +427,8 @@
             "description": "Quantity results of report ",
             "required": false,
             "type": "string",
-            "example": "9"
+            "default": "10",
+            "example": "10"
           }
         ],
         "security": [{ "Bearer": [] }],
